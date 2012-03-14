@@ -1,0 +1,139 @@
+<?xml  version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+    xmlns:jee="http://www.springframework.org/schema/jee"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-3.1.xsd
+        http://www.springframework.org/schema/jee
+        http://www.springframework.org/schema/jee/spring-jee-3.1.xsd
+        http://www.springframework.org/schema/jdbc
+        http://www.springframework.org/schema/jdbc/spring-jdbc-3.1.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd">
+
+    <!-- Get the Database from the Java Environment via JNDI -->
+    <jee:jndi-lookup id="dataSource" jndi-name="java:/aadhar-db" />
+
+    <!-- Configure the Hibernate Session Factory -->
+    <bean id="hibernateSessionFactory"
+        class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean"
+        p:packagesToScan="com.ignou.aadhar.domain">
+        <property name="dataSource" ref="dataSource" />
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.dialect">org.hibernate.dialect.MySQL5InnoDBDialect</prop>
+                <prop key="hibernate.show_sql">true</prop>
+            </props>
+        </property>
+    </bean>
+
+
+
+
+
+    <!-- Configure the Hibernate's database transaction manager -->
+    <bean id="transactionManager"
+        class="org.springframework.orm.hibernate3.HibernateTransactionManager"
+        p:sessionFactory-ref="hibernateSessionFactory" />
+
+    <!-- Specifying the Base Package for MVC Controllers -->
+    <context:component-scan base-package="com.ignou.aadhar.controllers" />
+
+    <!-- Our MVC is annotations driver. Tell the same to the framework -->
+    <mvc:annotation-driven />
+    <tx:annotation-driven proxy-target-class="true" />
+
+    <!-- Default page when only / is provided in URL -->
+    <mvc:view-controller path="/" view-name="welcome" />
+
+    <!-- Excluding certain directories containing static resources -->
+    <mvc:resources mapping="/resources/**" location="/resources/" />
+
+    <!-- Configure the View resolution for the JSPs -->
+    <bean id="jspViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/views/" />
+        <property name="suffix" value=".jsp" />
+    </bean>
+
+
+
+
+
+<!--
+================================================================================
+
+                             DATA ACCESS LAYER OBJECTS
+
+This xml file stores the configuration for the data access objects used in the
+project.
+
+================================================================================
+-->
+    <bean id="genericDao" class="com.ignou.aadhar.dao.hibernate.GenericDaoHibernate">
+        <constructor-arg value="com.ignou.aadhar.domain.City" />
+        <property name="sessionFactory" ref="hibernateSessionFactory" />
+    </bean>
+    <bean id="cityDao" class="com.ignou.aadhar.dao.hibernate.CityDaoHibernate">
+        <property name="sessionFactory" ref="hibernateSessionFactory" />
+    </bean>
+    <bean id="stateDao" class="com.ignou.aadhar.dao.hibernate.StateDaoHibernate">
+        <property name="sessionFactory" ref="hibernateSessionFactory" />
+    </bean>
+    <bean id="districtDao" class="com.ignou.aadhar.dao.hibernate.DistrictDaoHibernate">
+        <property name="sessionFactory" ref="hibernateSessionFactory" />
+    </bean>
+    <bean id="accountDao" class="com.ignou.aadhar.dao.hibernate.AccountDaoHibernate">
+        <property name="sessionFactory" ref="hibernateSessionFactory" />
+    </bean>
+    <bean id="addressDao" class="com.ignou.aadhar.dao.hibernate.AddressDaoHibernate">
+        <property name="sessionFactory" ref="hibernateSessionFactory" />
+    </bean>
+    <bean id="bankDao" class="com.ignou.aadhar.dao.hibernate.BankDaoHibernate">
+        <property name="sessionFactory" ref="hibernateSessionFactory" />
+    </bean>
+    <bean id="certificateDao" class="com.ignou.aadhar.dao.hibernate.CertificateDaoHibernate">
+        <property name="sessionFactory" ref="hibernateSessionFactory" />
+    </bean>
+    <bean id="citizenDao" class="com.ignou.aadhar.dao.hibernate.CitizenDaoHibernate">
+        <property name="sessionFactory" ref="hibernateSessionFactory" />
+    </bean>
+    <bean id="serviceProviderDao" class="com.ignou.aadhar.dao.hibernate.ServiceProviderDaoHibernate">
+        <property name="sessionFactory" ref="hibernateSessionFactory" />
+    </bean>
+    <bean id="transactionDao" class="com.ignou.aadhar.dao.hibernate.TransactionDaoHibernate">
+        <property name="sessionFactory" ref="hibernateSessionFactory" />
+    </bean>
+
+
+
+
+<!--
+================================================================================
+
+                             SERVICE LAYER OBJECTS
+
+This xml file stores the configuration for the service layer objects used in the
+project.
+
+================================================================================
+-->
+     <bean id="cityService" class="com.ignou.aadhar.service.impl.CityServiceImpl" />
+     <bean id="stateService" class="com.ignou.aadhar.service.impl.StateServiceImpl" />
+     <bean id="districtService" class="com.ignou.aadhar.service.impl.DistrictServiceImpl" />
+     <bean id="accountService" class="com.ignou.aadhar.service.impl.AccountServiceImpl" />
+     <bean id="addressService" class="com.ignou.aadhar.service.impl.AddressServiceImpl" />
+     <bean id="bankService" class="com.ignou.aadhar.service.impl.BankServiceImpl" />
+     <bean id="certificateService" class="com.ignou.aadhar.service.impl.CertificateServiceImpl" />
+     <bean id="citizenService" class="com.ignou.aadhar.service.impl.CitizenServiceImpl" />
+     <bean id="serviceProviderService" class="com.ignou.aadhar.service.impl.ServiceProviderServiceImpl" />
+     <bean id="transactionService" class="com.ignou.aadhar.service.impl.TransactionServiceImpl" />
+</beans>
