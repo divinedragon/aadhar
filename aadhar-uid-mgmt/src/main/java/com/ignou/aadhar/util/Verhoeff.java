@@ -74,7 +74,7 @@ public final class Verhoeff {
      * Generates the Verhoeff digit for the provided numeric string.
      * @return The generated Verhoeff digit for the provided numeric string.
      */
-    public static String GenerateVerhoeffDigit(String num){
+    public static String GenerateVerhoeffDigit(String num) {
 
         int c = 0;
         int[] myArray = StringToReversedIntArray(num);
