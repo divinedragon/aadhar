@@ -114,8 +114,8 @@ public class CityDaoHibernate extends GenericDaoHibernate<City, Integer>
 
     /**
      * Gets the records from the Database based on the parameters provided.
-     * @param city City Name which needs to be searched.
-     * @param state State for which the cities need to be searched.
+     * @param searchField The field name on which the search is to be made.
+     * @param searchValue Value which needs to be searched.
      * @param pageNumber Initial offset of the records.
      * @param recordsPerPage Total number of records which are selected for
      * resultset.
@@ -125,32 +125,34 @@ public class CityDaoHibernate extends GenericDaoHibernate<City, Integer>
      * record data as key-value pairs.
      */
     @Override
-    public List<Map<String, Object>> getCities(String city, String state,
-            Integer pageNumber, Integer recordsPerPage, String sortField,
-            String sortOrder) {
+    public List<Map<String, Object>> getCities(String searchField,
+            String searchValue, Integer pageNumber, Integer recordsPerPage,
+            String sortField, String sortOrder) {
 
         List<City> cities = null;
         List<Map<String, Object>> returnCities = new ArrayList<Map<String,Object>>();
 
-        Criteria criteria = getSession().createCriteria(City.class, "c")
+        Criteria criteria = getSessionFactory().getCurrentSession()
+                                    .createCriteria(City.class, "c")
                                         .createAlias("state", "s");
 
-        /* Add the city field search condition if provided */
-        if (city != null && !city.isEmpty()) {
-            criteria.add(Restrictions.ilike("c.city", city));
-        }
-
-        /* Add the State field search condition if provided */
-        if (state != null && !state.isEmpty()) {
-            criteria.add(Restrictions.ilike("s.state", state));
+        /* Add the search parameters to the criteria */
+        if (searchField != null && !searchField.isEmpty()
+                && searchValue != null && !searchValue.isEmpty()) {
+            /* Now there are only two fields which we can search here. */
+            if ("city".equals(searchField)) {
+                criteria.add(Restrictions.ilike("c.city", searchValue));
+            } else if ("state".equals(searchField)) {
+                criteria.add(Restrictions.ilike("s.state", searchValue));
+            }
         }
 
         /* Let's first get the total number of records that satisfy the provided
          * parameters.
          */
-        Long totalCount = (Long) criteria
+        String totalCount = (String) criteria
                                           .setProjection(Projections.rowCount())
-                                          .uniqueResult();
+                                          .uniqueResult().toString();
 
         /* Reset the Criteria specification to remove the projection details */
         criteria.setProjection(null);

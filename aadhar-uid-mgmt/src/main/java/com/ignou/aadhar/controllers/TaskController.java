@@ -16,32 +16,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.ignou.aadhar.dao;
+package com.ignou.aadhar.controllers;
 
-import java.util.List;
-import java.util.Map;
-
-import com.ignou.aadhar.domain.City;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 /**
- * Data Access Object providing methods to perform operations on table - City.
+ * Controller to handle the requests for managing task operations in the system.
  * @author Deepak Shakya
  *
  */
-public interface CityDao extends GenericDao<City, Integer> {
+@Controller
+@RequestMapping("/tasks")
+public class TaskController {
 
-    /**
-     * Gets the 
-     * @param searchField
-     * @param searchValue
-     * @param pageNumber
-     * @param recordsPerPage
-     * @param sortField
-     * @param sortOrder
-     * @return
-     */
-    public List<Map<String, Object>> getCities(String searchField,
-            String searchValue, Integer pageNumber, Integer recordsPerPage,
-            String sortField, String sortOrder);
+    @RequestMapping(value = "/managehome", method = RequestMethod.GET)
+    public String showManageView() {
 
+        return "tasks/managehome";
+    }
 }

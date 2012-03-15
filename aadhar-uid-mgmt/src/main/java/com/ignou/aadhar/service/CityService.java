@@ -30,7 +30,7 @@ import com.ignou.aadhar.domain.City;
  */
 public interface CityService extends GenericService<City> {
 
-    public List<Map<String, Object>> getCities(String city, String state,
+    public List<Map<String, Object>> getCities(String searchField, String searchValue,
             Integer pageNumber, Integer recordsPerPage, String sortField,
             String sortOrder);
 }

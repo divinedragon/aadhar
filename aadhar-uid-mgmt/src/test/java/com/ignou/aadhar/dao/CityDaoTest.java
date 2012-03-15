@@ -60,7 +60,7 @@ public class CityDaoTest extends HibernateDaoSupport {
      * We again fetch the same record in a different object and then compare
      * if the name of the city for both the object matches or not.
      */
-    @Test
+
     public void testCity() {
 
         String strDummyCity1 = "DummyCity";
@@ -105,7 +105,7 @@ public class CityDaoTest extends HibernateDaoSupport {
     /**
      * Testing the Association between the state table and city table.
      */
-    @Test
+
     public void testValidCityAndState() {
         /* State ID of Assam in DB = 4 */
         Integer stateIdAssam = 4;
@@ -129,19 +129,22 @@ public class CityDaoTest extends HibernateDaoSupport {
 
         /* Pull First 15 rows */
         cities = cityDao.getCities(null, null, 0, 15, null, null);
-        Assert.assertTrue("No records fetched when pulled first 15 records.", cities.size() == 15);
+        Assert.assertTrue("No records fetched when pulled first 15 records.",
+                cities.size() == 15);
 
         /* Pull only 1 row */
         cities = cityDao.getCities(null, null, 0, 1, null, null);
         Assert.assertTrue("Failed to pull only 1 record", cities.size() == 1);
 
         /* Pull just the record for rajkot. Record count = 1 */
-        cities = cityDao.getCities("rajkot", null, 0, 15, null, null);
-        Assert.assertTrue("No records fetched from city search", cities.size() == 1);
+        cities = cityDao.getCities("city", "rajkot", 0, 15, null, null);
+        Assert.assertTrue("No records fetched from city search",
+                cities.size() == 1);
 
         /* Pull records for state Goa. */
-        cities = cityDao.getCities(null, "goa", 0, 15, null, null);
-        Assert.assertEquals("No records fetched from state search ", "Goa", cities.get(0).get("state"));
+        cities = cityDao.getCities("state", "Goa", 0, 15, null, null);
+        Assert.assertEquals("No records fetched from state search ",
+                "Goa", cities.get(0).get("state"));
 
         /* Because we cannot check the ordering of records in test, we are just
          * passing the parameters to see if they fail to return records. If they

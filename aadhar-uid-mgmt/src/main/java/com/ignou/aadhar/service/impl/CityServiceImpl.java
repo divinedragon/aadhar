@@ -78,10 +78,11 @@ public class CityServiceImpl implements CityService {
     }
 
     @Override
-    public List<Map<String, Object>> getCities(String city, String state,
-            Integer pageNumber, Integer recordsPerPage, String sortField,
-            String sortOrder) {
-        return cityDao.getCities(city, state, pageNumber, recordsPerPage, sortField,
+    @Transactional
+    public List<Map<String, Object>> getCities(String searchField,
+            String searchValue, Integer pageNumber, Integer recordsPerPage,
+            String sortField, String sortOrder) {
+        return cityDao.getCities(searchField, searchValue, pageNumber, recordsPerPage, sortField,
                     sortOrder);
     }
 }

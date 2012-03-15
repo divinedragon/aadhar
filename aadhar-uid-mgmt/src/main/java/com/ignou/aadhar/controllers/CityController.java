@@ -204,9 +204,16 @@ public class CityController {
         if (page == null || page == 0) {
             page = Constants.START_PAGE;
         } else {
-            startIndex = (page - 1) * recordCount;
+            startIndex = page * recordCount;
         }
 
+        /* Also, if there is no search parameter provided, we will assign city
+         * as the default search parameter.
+         */
+        if (searchField == null || searchField.isEmpty()) {
+            searchField = "city";
+        }
+        
         /* Lets start preparing the JSON output */
         StringBuilder outputData = new StringBuilder();
         outputData.append("{ \"page\" : \"" + startIndex + "\", ");
@@ -226,13 +233,13 @@ public class CityController {
         
         JsonWrapper jsonData;
 
-        String[] validParams = { "page", "rp", "sortname", "sort", "city", "state" };
+        String[] validParams = { "page", "rp", "sortname", "sortorder", "city", "state" };
 
         try {
             Map<String, String> paramMap = JsonRequestValidator.validateRequestParams(filter, validParams);
 
-            String city = paramMap.get("city");
-            String state = paramMap.get("state");
+            String searchField = paramMap.get("qtype");
+            String searchValue = paramMap.get("query");
             String sortField = paramMap.get("sortname");
             String sortOrder = paramMap.get("sortorder");
 
@@ -250,8 +257,8 @@ public class CityController {
             /* Lets fetch the records from the database for the search condition
              * provided in the request.
              */
-            List<Map<String, Object>> cities = cityService.getCities(city,
-                                                    state, pageNumber, 
+            List<Map<String, Object>> cities = cityService.getCities(searchField,
+                                                    searchValue, pageNumber, 
                                                     recordsPerPage, sortField,
                                                     sortOrder);
 
@@ -259,7 +266,8 @@ public class CityController {
             if (cities != null && !cities.isEmpty()) {
                 
                 /* Convert the city data as Json Wrapper instance */
-                jsonData = new JsonWrapper(city, "Success");
+                jsonData = new JsonWrapper(cities, "Success");
+                jsonData.put("total", cities.get(0).get("totalCount"));
             } else {
 
                 /* Because no records were fetched, we will return empty list */
@@ -271,6 +279,8 @@ public class CityController {
             e.printStackTrace();
         }
 
+        System.out.println(jsonData);
+        
         return jsonData;
     }
 }
