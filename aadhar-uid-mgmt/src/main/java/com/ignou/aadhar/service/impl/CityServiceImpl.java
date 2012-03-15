@@ -19,6 +19,7 @@
 package com.ignou.aadhar.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -74,5 +75,13 @@ public class CityServiceImpl implements CityService {
     @Transactional
     public void delete(Integer id) throws RuntimeException {
         cityDao.delete(id);
+    }
+
+    @Override
+    public List<Map<String, Object>> getCities(String city, String state,
+            Integer pageNumber, Integer recordsPerPage, String sortField,
+            String sortOrder) {
+        return cityDao.getCities(city, state, pageNumber, recordsPerPage, sortField,
+                    sortOrder);
     }
 }

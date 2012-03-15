@@ -29,4 +29,12 @@ public interface Constants {
      * Total length of the generated UID.
      */
     public static final int UID_LENGTH = 15;
+
+    /**
+     * Default number of records to be displayed on the page in case this value
+     * is not supplied in the request.
+     */
+    public static final Integer MAX_RECORDS_PER_PAGE = 15;
+
+    public static final Integer START_PAGE = 1;
 }

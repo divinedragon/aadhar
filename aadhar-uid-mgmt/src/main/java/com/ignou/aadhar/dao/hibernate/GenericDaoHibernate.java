@@ -38,6 +38,8 @@ import com.ignou.aadhar.dao.GenericDao;
  * Generic Dao for Hibernate to perform the CRUD operations for the Models.
  * @author Deepak Shakya
  * @param <MODEL> Model class that will provide the final functionality.
+ * @param <PRIMARYKEY> Class which is used to map the Primary Key column of the
+ * database table.
  */
 @Repository
 public class GenericDaoHibernate<MODEL, PRIMARYKEY extends Serializable>
@@ -47,6 +49,8 @@ public class GenericDaoHibernate<MODEL, PRIMARYKEY extends Serializable>
     /**
      * Hibernate Session Factory instance used to perform the database
      * operations.
+     * @param hibernateSessionFactory Hibernate Session Factory instance
+     * injected at runtime.
      */
     @Autowired
     public void init(SessionFactory hibernateSessionFactory) {
@@ -130,11 +134,11 @@ public class GenericDaoHibernate<MODEL, PRIMARYKEY extends Serializable>
         /* Generalized query for fetching the ENUM data for the column in the
          * required table specified.
          */
-        String strSqlQuery = "SELECT SUBSTRING(COLUMN_TYPE,5) EnumData " +
-                "FROM INFORMATION_SCHEMA.COLUMNS " +
-                "WHERE TABLE_SCHEMA = 'aadhar' " +
-                "AND TABLE_NAME = '" + tableName + "' " +
-                "AND COLUMN_NAME = '" + columnName + "';";
+        String strSqlQuery = "SELECT SUBSTRING(COLUMN_TYPE,5) EnumData "
+               + "FROM INFORMATION_SCHEMA.COLUMNS "
+               + "WHERE TABLE_SCHEMA = 'aadhar' "
+               + "AND TABLE_NAME = '" + tableName + "' "
+               + "AND COLUMN_NAME = '" + columnName + "';";
 
         /* Get the Hibernate Session instance to perform db operation */
         Session session = getSessionFactory().getCurrentSession();

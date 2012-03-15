@@ -19,6 +19,7 @@
 package com.ignou.aadhar.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Assert;
 
@@ -115,5 +116,45 @@ public class CityDaoTest extends HibernateDaoSupport {
 
         Assert.assertEquals("State details not fetched in City.",
                 cityInAssam.getState().getId(), stateIdAssam);
+    }
+
+    /**
+     * Testing the record fetching logic for search parameters and record
+     * parameters from City table.
+     */
+    @Test
+    public void testGetCities() {
+
+        List<Map<String, Object>> cities;
+
+        /* Pull First 15 rows */
+        cities = cityDao.getCities(null, null, 0, 15, null, null);
+        Assert.assertTrue("No records fetched when pulled first 15 records.", cities.size() == 15);
+
+        /* Pull only 1 row */
+        cities = cityDao.getCities(null, null, 0, 1, null, null);
+        Assert.assertTrue("Failed to pull only 1 record", cities.size() == 1);
+
+        /* Pull just the record for rajkot. Record count = 1 */
+        cities = cityDao.getCities("rajkot", null, 0, 15, null, null);
+        Assert.assertTrue("No records fetched from city search", cities.size() == 1);
+
+        /* Pull records for state Goa. */
+        cities = cityDao.getCities(null, "goa", 0, 15, null, null);
+        Assert.assertEquals("No records fetched from state search ", "Goa", cities.get(0).get("state"));
+
+        /* Because we cannot check the ordering of records in test, we are just
+         * passing the parameters to see if they fail to return records. If they
+         * are fetching some records, we should be fine.
+         */
+        /* Only 1 record with default sorting on city field */
+        cities = cityDao.getCities(null, null, 0, 1, "city", null);
+        Assert.assertTrue("No records fetched with only 1 record and default"
+                    + " sorting on city column", cities.size() == 1);
+
+        /* Only 1 record with descending sorting on city field */
+        cities = cityDao.getCities(null, null, 0, 1, "city", "desc");
+        Assert.assertTrue("No records fetched with only 1 record and DESC"
+                    + " sorting on city column", cities.size() == 1);
     }
 }

@@ -7,9 +7,9 @@
         <div id="nav-right">
         
             <div class="nav-divider">&nbsp;</div>
-            <div class="showhide-account"><img src="<c:url value="/resources/images/shared/nav/nav_myaccount.gif" />" width="93" height="14" alt="" /></div>
+            <div class="showhide-account"><img src="images/shared/nav/nav_myaccount.gif" width="93" height="14" alt="" /></div>
             <div class="nav-divider">&nbsp;</div>
-            <a href="" id="logout"><img src="<c:url value="/resources/images/shared/nav/nav_logout.gif" />" width="64" height="14" alt="" /></a>
+            <a href="" id="logout"><img src="images/shared/nav/nav_logout.gif" width="64" height="14" alt="" /></a>
             <div class="clear">&nbsp;</div>
         
             <!--  start account-content -->    
@@ -60,10 +60,10 @@
         <!--[if lte IE 6]><table><tr><td><![endif]-->
         <div class="select_sub">
             <ul class="sub">
-                <li><a href="#nogo">View Service Providers</a></li>
-                <li><a href="#nogo">Add New Service Provider</a></li>
-                <li><a href="#nogo">Modify Service Provider</a></li>
-                <li><a href="#nogo">Delete Service Provider</a></li>
+                <li><a href="#nogo">View All</a></li>
+                <li><a href="#nogo">Add New</a></li>
+                <li><a href="#nogo">Modify</a></li>
+                <li><a href="#nogo">Delete</a></li>
             </ul>
         </div>
         <!--[if lte IE 6]></td></tr></table></a><![endif]-->

@@ -18,7 +18,9 @@
  */
 package com.ignou.aadhar.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -26,20 +28,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.ignou.aadhar.constants.Constants;
 import com.ignou.aadhar.domain.City;
 import com.ignou.aadhar.domain.State;
 import com.ignou.aadhar.editors.StateEditor;
 import com.ignou.aadhar.service.CityService;
 import com.ignou.aadhar.service.StateService;
 import com.ignou.aadhar.service.impl.StateServiceImpl;
+import com.ignou.aadhar.util.json.JsonRequestValidator;
+import com.ignou.aadhar.util.json.JsonWrapper;
 
 /**
  * Controller to handle the requests for managing cities in the database.
@@ -62,7 +67,7 @@ public class CityController {
         /* Let's bind the conversion mechanism for States so that they are
          * mapped correctly in the state attribute of City class.
          */
-        dataBinder.registerCustomEditor(State.class, 
+        dataBinder.registerCustomEditor(State.class,
                 new StateEditor(((StateServiceImpl) stateService).getStateDao()));
     }
 
@@ -175,5 +180,97 @@ public class CityController {
     public String list() {
 
         return "city/grid";
+    }
+
+    @RequestMapping(value = "/list/json", method = RequestMethod.GET)
+    @ResponseBody
+    public JsonWrapper listJson(
+            @RequestParam(value = "page") Integer page,
+            @RequestParam(value = "rp") Integer recordCount,
+            @RequestParam(value = "sortname") String sortField,
+            @RequestParam(value = "sortorder") String sortOrder,
+            @RequestParam(value = "query") String searchValue,
+            @RequestParam(value = "qtype") String searchField) {
+
+        /* If there is no recordCount value, lets set from our side */
+        if (recordCount == null || recordCount == 0) {
+            recordCount = Constants.MAX_RECORDS_PER_PAGE;
+        }
+
+        /* Also, set the page index to start page if not provided. Otherwise, we
+         * will calculate the corresponding record offset.
+         */
+        int startIndex = 0;
+        if (page == null || page == 0) {
+            page = Constants.START_PAGE;
+        } else {
+            startIndex = (page - 1) * recordCount;
+        }
+
+        /* Lets start preparing the JSON output */
+        StringBuilder outputData = new StringBuilder();
+        outputData.append("{ \"page\" : \"" + startIndex + "\", ");
+        outputData.append("\"rp\" : \"" + recordCount + "\", ");
+        outputData.append("\"sortname\" : \"" + sortField + "\", ");
+        outputData.append("\"sortorder\" : \"" + sortOrder + "\", ");
+        outputData.append("\"" + searchField + "\" : \"" + searchValue + "\" }");
+
+        JsonWrapper jsonData = getCityList(outputData.toString());
+
+        return jsonData;
+    }
+
+    @RequestMapping(value = "/list/{filter}", method = RequestMethod.GET)
+    @ResponseBody
+    private JsonWrapper getCityList(@PathVariable String filter) {
+        
+        JsonWrapper jsonData;
+
+        String[] validParams = { "page", "rp", "sortname", "sort", "city", "state" };
+
+        try {
+            Map<String, String> paramMap = JsonRequestValidator.validateRequestParams(filter, validParams);
+
+            String city = paramMap.get("city");
+            String state = paramMap.get("state");
+            String sortField = paramMap.get("sortname");
+            String sortOrder = paramMap.get("sortorder");
+
+            /* Get the recordsPerPage value */
+            Integer recordsPerPage = null;
+            if (paramMap.get("rp") != null) {
+                recordsPerPage = new Integer(paramMap.get("rp"));
+            }
+
+            Integer pageNumber = null;
+            if (paramMap.get("page") != null) {
+                pageNumber = new Integer(paramMap.get("page"));
+            }
+
+            /* Lets fetch the records from the database for the search condition
+             * provided in the request.
+             */
+            List<Map<String, Object>> cities = cityService.getCities(city,
+                                                    state, pageNumber, 
+                                                    recordsPerPage, sortField,
+                                                    sortOrder);
+
+            /* Check if any records were fetched successfully */
+            if (cities != null && !cities.isEmpty()) {
+                
+                /* Convert the city data as Json Wrapper instance */
+                jsonData = new JsonWrapper(city, "Success");
+            } else {
+
+                /* Because no records were fetched, we will return empty list */
+                jsonData = new JsonWrapper(new ArrayList(), "Failure",
+                                    "No records found for search parameters");
+            }
+        } catch (Exception e) {
+            jsonData = new JsonWrapper("Failure", e.getMessage());
+            e.printStackTrace();
+        }
+
+        return jsonData;
     }
 }

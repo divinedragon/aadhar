@@ -18,6 +18,9 @@
  */
 package com.ignou.aadhar.dao;
 
+import java.util.List;
+import java.util.Map;
+
 import com.ignou.aadhar.domain.City;
 
 /**
@@ -26,5 +29,9 @@ import com.ignou.aadhar.domain.City;
  *
  */
 public interface CityDao extends GenericDao<City, Integer> {
+
+    public List<Map<String, Object>> getCities(String city, String state,
+            Integer pageNumber, Integer recordsPerPage, String sortField,
+            String sortOrder);
 
 }

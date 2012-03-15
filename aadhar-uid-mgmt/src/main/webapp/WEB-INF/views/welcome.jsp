@@ -18,11 +18,11 @@
 
 <table border="0" width="100%" cellpadding="0" cellspacing="0" id="content-table">
 <tr>
-    <th rowspan="3" class="sized"><img src="<c:url value="/resources/images/shared/side_shadowleft.jpg" />" width="20" height="300" alt="" /></th>
+    <th rowspan="3" class="sized"><img src="images/shared/side_shadowleft.jpg" width="20" height="300" alt="" /></th>
     <th class="topleft"></th>
     <td id="tbl-border-top">&nbsp;</td>
     <th class="topright"></th>
-    <th rowspan="3" class="sized"><img src="<c:url value="/resources/images/shared/side_shadowright.jpg" />" width="20" height="300" alt="" /></th>
+    <th rowspan="3" class="sized"><img src="images/shared/side_shadowright.jpg" width="20" height="300" alt="" /></th>
 </tr>
 <tr>
     <td id="tbl-border-left"></td>
@@ -198,7 +198,7 @@
                     </select>
                     </form>
                 </td>
-                <td><a href=""  id="date-pick"><img src="<c:url value="/resources/images/forms/icon_calendar.jpg" />" alt="" /></a></td>
+                <td><a href=""  id="date-pick"><img src="images/forms/icon_calendar.jpg" alt="" /></a></td>
             </tr>
             </table>
         
@@ -253,7 +253,7 @@
         
         <!--  start related-act-top -->
         <div id="related-act-top">
-        <img src="<c:url value="/resources/images/forms/header_related_act.gif" />" width="271" height="43" alt="" />
+        <img src="images/forms/header_related_act.gif" width="271" height="43" alt="" />
         </div>
         <!-- end related-act-top -->
         
@@ -263,7 +263,7 @@
             <!--  start related-act-inner -->
             <div id="related-act-inner">
             
-                <div class="left"><a href=""><img src="<c:url value="/resources/images/forms/icon_plus.gif" />" width="21" height="21" alt="" /></a></div>
+                <div class="left"><a href=""><img src="images/forms/icon_plus.gif" width="21" height="21" alt="" /></a></div>
                 <div class="right">
                     <h5>Add another product</h5>
                     Lorem ipsum dolor sit amet consectetur
@@ -277,7 +277,7 @@
                 <div class="clear"></div>
                 <div class="lines-dotted-short"></div>
                 
-                <div class="left"><a href=""><img src="<c:url value="/resources/images/forms/icon_minus.gif" />" width="21" height="21" alt="" /></a></div>
+                <div class="left"><a href=""><img src="images/forms/icon_minus.gif" width="21" height="21" alt="" /></a></div>
                 <div class="right">
                     <h5>Delete products</h5>
                     Lorem ipsum dolor sit amet consectetur
@@ -291,7 +291,7 @@
                 <div class="clear"></div>
                 <div class="lines-dotted-short"></div>
                 
-                <div class="left"><a href=""><img src="<c:url value="/resources/images/forms/icon_edit.gif" />" width="21" height="21" alt="" /></a></div>
+                <div class="left"><a href=""><img src="images/forms/icon_edit.gif" width="21" height="21" alt="" /></a></div>
                 <div class="right">
                     <h5>Edit categories</h5>
                     Lorem ipsum dolor sit amet consectetur
@@ -316,7 +316,7 @@
 </td>
 </tr>
 <tr>
-<td><img src="<c:url value="/resources/images/shared/blank.gif" />" width="695" height="1" alt="blank" /></td>
+<td><img src="images/shared/blank.gif" width="695" height="1" alt="blank" /></td>
 <td></td>
 </tr>
 </table>

@@ -8,24 +8,24 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title><%= PAGE_TITLE %></title>
-<link rel="stylesheet" href="<c:url value="/resources/css/screen.css" />" type="text/css" media="screen" title="default" />
+<link rel="stylesheet" href="css/screen.css" type="text/css" media="screen" title="default" />
 <!--[if IE]>
-<link rel="stylesheet" media="all" type="text/css" href="<c:url value="/resources/css/pro_dropline_ie.css" />" />
+<link rel="stylesheet" media="all" type="text/css" href="css/pro_dropline_ie.css" />
 <![endif]-->
 
 <!--  Jquery core -->
-<script src="<c:url value="/resources/js/jquery/jquery-1.5.1.min.js" />" type="text/javascript"></script>
+<script src="js/jquery/jquery-1.5.1.min.js" type="text/javascript"></script>
  
 <!--  checkbox styling script -->
-<script src="<c:url value="/resources/js/jquery/ui.core.js" />" type="text/javascript"></script>
-<script src="<c:url value="/resources/js/jquery/ui.checkbox.js" />" type="text/javascript"></script>
-<script src="<c:url value="/resources/js/jquery/jquery.bind.js" />" type="text/javascript"></script>
+<script src="js/jquery/ui.core.js" type="text/javascript"></script>
+<script src="js/jquery/ui.checkbox.js" type="text/javascript"></script>
+<script src="js/jquery/jquery.bind.js" type="text/javascript"></script>
 
 
 <![if !IE 7]>
 
 <!--  styled select box script version 1 -->
-<script src="<c:url value="/resources/js/jquery/jquery.selectbox-0.5.js" />" type="text/javascript"></script>
+<script src="js/jquery/jquery.selectbox-0.5.js" type="text/javascript"></script>
 <script type="text/javascript">
 $(document).ready(function() {
     $('.styledselect').selectbox({ inputClass: "selectbox_styled" });
@@ -37,7 +37,7 @@ $(document).ready(function() {
 
 
 <!--  styled select box script version 2 --> 
-<script src="<c:url value="/resources/js/jquery/jquery.selectbox-0.5_style_2.js" />" type="text/javascript"></script>
+<script src="js/jquery/jquery.selectbox-0.5_style_2.js" type="text/javascript"></script>
 <script type="text/javascript">
 $(document).ready(function() {
     $('.styledselect_form_1').selectbox({ inputClass: "styledselect_form_1" });
@@ -46,7 +46,7 @@ $(document).ready(function() {
 </script>
 
 <!--  styled select box script version 3 --> 
-<script src="<c:url value="/resources/js/jquery/jquery.selectbox-0.5_style_2.js" />" type="text/javascript"></script>
+<script src="js/jquery/jquery.selectbox-0.5_style_2.js" type="text/javascript"></script>
 <script type="text/javascript">
 $(document).ready(function() {
     $('.styledselect_pages').selectbox({ inputClass: "styledselect_pages" });
@@ -54,7 +54,7 @@ $(document).ready(function() {
 </script>
 
 <!--  styled file upload script --> 
-<script src="<c:url value="/resources/js/jquery/jquery.filestyle.js" />" type="text/javascript"></script>
+<script src="js/jquery/jquery.filestyle.js" type="text/javascript"></script>
 <script type="text/javascript" charset="utf-8">
 $(function() {
     $("input.file_1").filestyle({ 
@@ -72,11 +72,11 @@ $(function(){
 </script> 
 
 <!-- Custom jquery scripts -->
-<script src="<c:url value="/resources/js/jquery/custom_jquery.js" />" type="text/javascript"></script>
+<script src="js/jquery/custom_jquery.js" type="text/javascript"></script>
  
 <!-- Tooltips -->
-<script src="<c:url value="/resources/js/jquery/jquery.tooltip.js" />" type="text/javascript"></script>
-<script src="<c:url value="/resources/js/jquery/jquery.dimensions.js" />" type="text/javascript"></script>
+<script src="js/jquery/jquery.tooltip.js" type="text/javascript"></script>
+<script src="js/jquery/jquery.dimensions.js" type="text/javascript"></script>
 <script type="text/javascript">
 $(function() {
     $('a.info-tooltip ').tooltip({
@@ -92,12 +92,12 @@ $(function() {
 </script> 
 
 <!--  date picker script -->
-<link rel="stylesheet" href="<c:url value="/resources/css/datePicker.css" />" type="text/css" />
+<link rel="stylesheet" href="css/datePicker.css" type="text/css" />
 <style type="text/css">
     label { color: #333333; }
 </style>
-<script src="<c:url value="/resources/js/jquery/date.js" />" type="text/javascript"></script>
-<script src="<c:url value="/resources/js/jquery/date.js" />" type="text/javascript"></script>
+<script src="js/jquery/date.js" type="text/javascript"></script>
+<script src="js/jquery/date.js" type="text/javascript"></script>
 <script type="text/javascript" charset="utf-8">
     $(function() {
 
@@ -160,7 +160,7 @@ $(function() {
 </script>
 
 <!-- MUST BE THE LAST SCRIPT IN <HEAD></HEAD> png fix -->
-<script src="<c:url value="/resources/js/jquery/jquery.pngFix.pack.js" />" type="text/javascript"></script>
+<script src="js/jquery/jquery.pngFix.pack.js" type="text/javascript"></script>
 <script type="text/javascript">
     $(function() { $(document).pngFix( ); });
 </script>
@@ -174,7 +174,7 @@ $(function() {
 
     <!-- start logo -->
     <div id="logo">
-    <a href=""><img src="<c:url value="/resources/images/shared/logo.png" />" width="156" height="40" alt="" /></a>
+    <a href=""><img src="images/shared/logo.png" width="156" height="40" alt="" /></a>
     </div>
     <!-- end logo -->
     
@@ -195,7 +195,7 @@ $(function() {
          
         </td>
         <td>
-        <input type="image" src="<c:url value="/resources/images/shared/top_search_btn.gif" />"  />
+        <input type="image" src="images/shared/top_search_btn.gif" />
         </td>
         </tr>
         </table>
