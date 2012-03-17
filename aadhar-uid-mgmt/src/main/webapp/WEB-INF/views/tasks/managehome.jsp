@@ -3,13 +3,21 @@
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%
-    String PAGE_TITLE = ":: Aadhar :: Manage City, District and States";
+    String PAGE_TITLE = ":: Aadhar :: Manage States, Districts and Cities";
 %>
 <%@include file="../common/include_header.jsp" %>
 
 <link rel="stylesheet" href="../css/flexigrid.css" type="text/css" media="screen" title="default" />
 <link rel="stylesheet" href="../css/flexigrid.pack.css" type="text/css" media="screen" title="default" />
+<link type='text/css' href='../css/basic.css' rel='stylesheet' media='screen' />
+<!-- IE6 "fix" for the close png image -->
+<!--[if lt IE 7]>
+<link type='text/css' href='../css/basic_ie.css' rel='stylesheet' media='screen' />
+<![endif]-->
 
+<style type="text/css">
+    .flexigrid div.sDiv2 .qsbox { width:100px }
+</style>
 <div id="page-heading"><h1>Manage City, District and States</h1></div>
 
 
@@ -30,11 +38,20 @@
     <table border="0" width="100%" cellpadding="0" cellspacing="0">
     <tr valign="top">
     <td>
-    <h2>All Cities</h2>
-    <table id="cityTable"></table>
-    <div id="districtTable"></div>
-    <div id="stateTable"></div>
+        <div style="float:left">
+            <h2>All States</h2>
+            <div id="stateTable"></div>
+        </div>
 
+        <div style="float:left">
+            <h2>All Districts</h2>
+            <div id="districtTable"></div>
+        </div>
+
+        <div style="float:left">
+            <h2>All Cities</h2>
+            <div id="cityTable"></div>
+        </div>
     </td>
     </tr>
     <tr>
@@ -58,6 +75,19 @@
 </tr>
 </table>
 
+<!-- modal content -->
+<div id="basic-modal-content">
+    <h3>Basic Modal Dialog</h3>
+    <p>For this demo, SimpleModal is using this "hidden" data for its content. You can also populate the modal dialog with an AJAX response, standard HTML or DOM element(s).</p>
+    <p>Examples:</p>
+    <p><code>$('#basicModalContent').modal(); // jQuery object - this demo</code></p>
+    <p><code>$.modal(document.getElementById('basicModalContent')); // DOM</code></p>
+    <p><code>$.modal('&lt;p&gt;&lt;b&gt;HTML&lt;/b&gt; elements&lt;/p&gt;'); // HTML</code></p>
+    <p><code>$('&lt;div&gt;&lt;/div&gt;').load('page.html').modal(); // AJAX</code></p>
+
+    <p><a href='http://www.ericmmartin.com/projects/simplemodal/'>More details...</a></p>
+</div>
+
 <script type="text/javascript" src="../js/flexigrid.js"></script>
 <script type="text/javascript" src="../js/flexigrid.pack.js"></script>
 <script type="text/javascript">
@@ -71,7 +101,7 @@
             {
             	display: 'Id',
             	name : 'id',
-            	width : 75,
+            	width : 20,
             	sortable : true,
             	align: 'left',
             	hide : true
@@ -79,14 +109,14 @@
             {
             	display: 'City',
             	name : 'city',
-            	width : 250,
+            	width : 160,
             	sortable : true,
             	align: 'left'
             },
 	        {
             	display: 'State',
             	name : 'state',
-            	width : 250,
+            	width : 160,
             	sortable : true,
             	align: 'left'
             }
@@ -124,10 +154,10 @@
 	    singleSelect : true,
 	    title: 'Listing all Citites',
 	    useRp: true,
-	    rp: 15,
+	    rp: 50,
 	    showTableToggleBtn: true,
-	    width: 600,
-	    height: 200,
+	    width: 350,
+	    height: 250,
 	    preProcess : function (json) {
 	    	
 	    	var results = new Array();
@@ -190,7 +220,192 @@
     		 }
     	}
     }
+
+    /* Flexigrid for District Table */
+    $("#districtTable").flexigrid({
+        url: '../district/list/json',
+        method : "GET",
+        dataType: 'json',
+        colModel : [
+            {
+                display: 'Id',
+                name : 'id',
+                width : 20,
+                sortable : true,
+                align: 'left',
+                hide : true
+            },
+            {
+                display: 'District',
+                name : 'district',
+                width : 160,
+                sortable : true,
+                align: 'left'
+            },
+            {
+                display: 'State',
+                name : 'state',
+                width : 160,
+                sortable : true,
+                align: 'left'
+            }
+        ],
+        buttons : [
+            {
+                name: 'Add',
+                bclass: 'add',
+                onpress : cityGridButtonAction
+            },
+            {
+                name: 'Edit',
+                bclass: 'edit',
+                onpress : cityGridButtonAction
+            },
+            {
+                name: 'View',
+                bclass: 'view',
+                onpress : cityGridButtonAction
+            },
+            {
+                name: 'Delete',
+                bclass: 'delete',
+                onpress : cityGridButtonAction
+            },
+            {separator: true}
+        ],
+        searchitems : [
+            { display: 'District', name : 'district', isdefault: true },
+            { display: 'State', name : 'state' }
+        ],
+        sortname: "district",
+        sortorder: "asc",
+        usepager: true,
+        singleSelect : true,
+        title: 'Listing all Districts',
+        useRp: true,
+        rp: 50,
+        showTableToggleBtn: true,
+        width: 350,
+        height: 250,
+        preProcess : function (json) {
+            
+            var results = new Array();
+            jQuery.each(json.object, function() {
+                
+                var row = {};
+                var cell = new Array();
+                
+                jQuery.each(this, function(k, v) {
+                    if (k == "state" && v == "") {
+                        cell.push("NA");
+                    } else {
+                        cell.push(this);
+                    }
+                });
+
+                row["cell"] = cell;
+                results.push(row);
+            });
+            
+            return {
+                rows : results,
+                page : json.pageCount,
+                total : json.total
+            };
+        }
+    });
+
+    /* Flexigrid for State Table */
+    $("#stateTable").flexigrid({
+        url: '../state/list/json',
+        method : "GET",
+        dataType: 'json',
+        colModel : [
+            {
+                display: 'Id',
+                name : 'id',
+                width : 20,
+                sortable : true,
+                align: 'left',
+                hide : true
+            },
+            {
+                display: 'State',
+                name : 'state',
+                width : 170,
+                sortable : true,
+                align: 'left'
+            }
+        ],
+        buttons : [
+            {
+                name: 'Add',
+                bclass: 'add',
+                onpress : cityGridButtonAction
+            },
+            {
+                name: 'Edit',
+                bclass: 'edit',
+                onpress : cityGridButtonAction
+            },
+            {
+                name: 'View',
+                bclass: 'view',
+                onpress : cityGridButtonAction
+            },
+            {
+                name: 'Delete',
+                bclass: 'delete',
+                onpress : cityGridButtonAction
+            },
+            {separator: true}
+        ],
+        searchitems : [ { display: 'State', name : 'state' } ],
+        sortname: "state",
+        sortorder: "asc",
+        usepager: true,
+        singleSelect : true,
+        title: 'Listing all States',
+        useRp: true,
+        rp: 50,
+        showTableToggleBtn: true,
+        width: 200,
+        height: 200,
+        preProcess : function (json) {
+            
+            var results = new Array();
+            jQuery.each(json.object, function() {
+                
+                var row = {};
+                var cell = new Array();
+                
+                jQuery.each(this, function(k, v) {
+                    if (k == "state" && v == "") {
+                        cell.push("NA");
+                    } else {
+                        cell.push(this);
+                    }
+                });
+
+                row["cell"] = cell;
+                results.push(row);
+            });
+            
+            return {
+                rows : results,
+                page : json.pageCount,
+                total : json.total
+            };
+        }
+    });
+
     //-->
+</script>
+<script type="text/javascript" src="../js/jquery.simplemodal.js"></script>
+<script type="text/javascript">
+    $(function() {
+    	$('#basic-modal-content').modal();
+    });
 </script>
 
 <%@include file="../common/footer.jsp" %>
