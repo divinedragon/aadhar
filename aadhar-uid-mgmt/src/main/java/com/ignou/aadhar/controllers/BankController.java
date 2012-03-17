@@ -94,6 +94,13 @@ public class BankController {
         /* Get the bank record from the database */
         Bank bank = bankService.read(id);
 
+        /* Check if the record was fetched successfully */
+        if (bank == null || bank.getId() == null) {
+            /* The record for the corresponding id does not exist */
+            model.addAttribute("msg", "No bank details exist for ID - " + id);
+            return "common/error";
+        }
+        
         /* Add this bank to model to make it available for the view page */
         model.addAttribute("dbBank", bank);
 
@@ -107,6 +114,13 @@ public class BankController {
         /* Read the bank object from the database */
         Bank bank = bankService.read(id);
 
+        /* Check if the record was fetched successfully */
+        if (bank == null || bank.getId() == null) {
+            /* The record for the corresponding id does not exist */
+            model.addAttribute("msg", "No bank details exist for ID - " + id);
+            return "common/error";
+        }
+        
         /* Save the database bank to the model along with the states */
         model.addAttribute("editBank", bank);
 
