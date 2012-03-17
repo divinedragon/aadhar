@@ -41,21 +41,16 @@ public class JsonRequestValidator {
     public static Map<String, String> validateRequestParams(String jsonString,
             String[] validParams) {
 
-        System.out.println("--> JSON String - " + jsonString);
-        
         Map<String, String> paramMap = (HashMap<String, String>) JsonMarshaller.parse(jsonString, HashMap.class);
 
         if (paramMap == null || paramMap.isEmpty()) {
             throw new IllegalArgumentException("Invalid Parameters : Empty/Invalid parameter list");
         }
 
-        System.out.println(paramMap);
-        
         List<String> paramList = Arrays.asList(validParams);
         Set<String> paramKeys = paramMap.keySet();
 
         for (String key : paramKeys) {
-            System.out.println("--> Processing Key - " + key);
             if (!(paramList.contains(key))) {
                 throw new IllegalArgumentException("Invalid Parameter : \"" + key + "\" is not a valid parameter");
             }

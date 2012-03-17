@@ -31,14 +31,16 @@ import com.ignou.aadhar.domain.City;
 public interface CityDao extends GenericDao<City, Integer> {
 
     /**
-     * Gets the 
-     * @param searchField
-     * @param searchValue
-     * @param pageNumber
-     * @param recordsPerPage
-     * @param sortField
-     * @param sortOrder
-     * @return
+     * Gets the records from the Database based on the parameters provided.
+     * @param searchField The field name on which the search is to be made.
+     * @param searchValue Value which needs to be searched.
+     * @param pageNumber Initial offset of the records.
+     * @param recordsPerPage Total number of records which are selected for
+     * resultset.
+     * @param sortField Name of the field on which the data needs to be sorted.
+     * @param sortOrder Order in which the sortField is sorted.
+     * @return Returns the records as list of map where each map stores the
+     * record data as key-value pairs.
      */
     public List<Map<String, Object>> getCities(String searchField,
             String searchValue, Integer pageNumber, Integer recordsPerPage,

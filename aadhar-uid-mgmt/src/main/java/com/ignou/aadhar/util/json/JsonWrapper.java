@@ -20,6 +20,12 @@ package com.ignou.aadhar.util.json;
 
 import java.util.HashMap;
 
+/**
+ * Wrapper over the HashMap class which stores the data with String keys. We
+ * are using it for processing and storing data for JSON objects.
+ * @author Deepak Shakya
+ *
+ */
 public class JsonWrapper extends HashMap<String, Object> {
 
     /**

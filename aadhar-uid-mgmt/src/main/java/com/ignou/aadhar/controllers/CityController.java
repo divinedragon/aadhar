@@ -68,7 +68,7 @@ public class CityController {
          * mapped correctly in the state attribute of City class.
          */
         dataBinder.registerCustomEditor(State.class,
-                new StateEditor(((StateServiceImpl) stateService).getStateDao()));
+              new StateEditor(((StateServiceImpl) stateService).getStateDao()));
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.GET)
@@ -170,7 +170,12 @@ public class CityController {
         /* Read the city object from the database */
         City city = cityService.read(id);
 
-        cityService.delete(id);
+        /* We will delete the object only if we were able to fetch it from the
+         * database.
+         */
+        if (city != null && city.getId() != null) {
+            cityService.delete(city.getId());
+        }
 
         /* Re-direct the user to the form */
         return "redirect:/city/create";
@@ -204,7 +209,7 @@ public class CityController {
         if (page == null || page == 0) {
             page = Constants.START_PAGE;
         } else {
-            startIndex = page * recordCount;
+            startIndex = (page - 1) * recordCount;
         }
 
         /* Also, if there is no search parameter provided, we will assign city
@@ -213,16 +218,22 @@ public class CityController {
         if (searchField == null || searchField.isEmpty()) {
             searchField = "city";
         }
-        
+
         /* Lets start preparing the JSON output */
         StringBuilder outputData = new StringBuilder();
         outputData.append("{ \"page\" : \"" + startIndex + "\", ");
         outputData.append("\"rp\" : \"" + recordCount + "\", ");
         outputData.append("\"sortname\" : \"" + sortField + "\", ");
         outputData.append("\"sortorder\" : \"" + sortOrder + "\", ");
-        outputData.append("\"" + searchField + "\" : \"" + searchValue + "\" }");
+        outputData.append("\"" + searchField + "\": \"" + searchValue + "\" }");
 
         JsonWrapper jsonData = getCityList(outputData.toString());
+
+        /* Add the additional parameters required at the UI */
+        jsonData.addParam("pageCount", page);
+        if (!jsonData.containsKey("total")) {
+            jsonData.addParam("total", 0);
+        }
 
         return jsonData;
     }
@@ -230,16 +241,18 @@ public class CityController {
     @RequestMapping(value = "/list/{filter}", method = RequestMethod.GET)
     @ResponseBody
     private JsonWrapper getCityList(@PathVariable String filter) {
-        
+
         JsonWrapper jsonData;
 
-        String[] validParams = { "page", "rp", "sortname", "sortorder", "city", "state" };
+        String[] validParams = {"page","rp","sortname","sortorder","city","state"};
 
         try {
-            Map<String, String> paramMap = JsonRequestValidator.validateRequestParams(filter, validParams);
+            Map<String, String> paramMap = JsonRequestValidator
+                                                .validateRequestParams(filter,
+                                                        validParams);
 
-            String searchField = paramMap.get("qtype");
-            String searchValue = paramMap.get("query");
+            String searchField = null;
+            String searchValue = null;
             String sortField = paramMap.get("sortname");
             String sortOrder = paramMap.get("sortorder");
 
@@ -254,17 +267,28 @@ public class CityController {
                 pageNumber = new Integer(paramMap.get("page"));
             }
 
+            /* Determine which field is being searched */
+            if (paramMap.get("city") != null) {
+                searchField = "city";
+                searchValue = paramMap.get("city");
+            }
+
+            if (paramMap.get("state") != null) {
+                searchField = "state";
+                searchValue = paramMap.get("state");
+            }
+
             /* Lets fetch the records from the database for the search condition
              * provided in the request.
              */
-            List<Map<String, Object>> cities = cityService.getCities(searchField,
-                                                    searchValue, pageNumber, 
-                                                    recordsPerPage, sortField,
-                                                    sortOrder);
+            List<Map<String, Object>> cities = cityService.getCities(
+                                                    searchField, searchValue,
+                                                    pageNumber, recordsPerPage,
+                                                    sortField, sortOrder);
 
             /* Check if any records were fetched successfully */
             if (cities != null && !cities.isEmpty()) {
-                
+
                 /* Convert the city data as Json Wrapper instance */
                 jsonData = new JsonWrapper(cities, "Success");
                 jsonData.put("total", cities.get(0).get("totalCount"));
@@ -274,13 +298,13 @@ public class CityController {
                 jsonData = new JsonWrapper(new ArrayList(), "Failure",
                                     "No records found for search parameters");
             }
+
+            jsonData.put("page", pageNumber);
         } catch (Exception e) {
             jsonData = new JsonWrapper("Failure", e.getMessage());
             e.printStackTrace();
         }
 
-        System.out.println(jsonData);
-        
         return jsonData;
     }
 }

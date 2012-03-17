@@ -96,7 +96,7 @@ $(function() {
 <style type="text/css">
     label { color: #333333; }
 </style>
-<script src="js/jquery/date.js" type="text/javascript"></script>
+<script src="../js/jquery/date.js" type="text/javascript"></script>
 
 
 <!-- MUST BE THE LAST SCRIPT IN <HEAD></HEAD> png fix -->

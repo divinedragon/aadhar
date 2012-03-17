@@ -68,28 +68,128 @@
         method : "GET",
         dataType: 'json',
 	    colModel : [
-	        {display: 'City', name : 'city', width : 40, sortable : true, align: 'left'},
-	        {display: 'State', name : 'state', width : 120, sortable : true, align: 'left'}
-	        ],
+            {
+            	display: 'Id',
+            	name : 'id',
+            	width : 75,
+            	sortable : true,
+            	align: 'left',
+            	hide : true
+            },
+            {
+            	display: 'City',
+            	name : 'city',
+            	width : 250,
+            	sortable : true,
+            	align: 'left'
+            },
+	        {
+            	display: 'State',
+            	name : 'state',
+            	width : 250,
+            	sortable : true,
+            	align: 'left'
+            }
+	    ],
 	    buttons : [
-	        {name: 'Add', bclass: 'add', onpress : function(){alert("Add");}},
-	        {name: 'Delete', bclass: 'delete', onpress : function(){alert("Delete");}},
+	        {
+	        	name: 'Add',
+	        	bclass: 'add',
+	        	onpress : cityGridButtonAction
+	        },
+	        {
+                name: 'Edit',
+                bclass: 'edit',
+                onpress : cityGridButtonAction
+            },
+            {
+                name: 'View',
+                bclass: 'view',
+                onpress : cityGridButtonAction
+            },
+	        {
+	        	name: 'Delete',
+	        	bclass: 'delete',
+	        	onpress : cityGridButtonAction
+	        },
 	        {separator: true}
-	        ],
+	    ],
 	    searchitems : [
-	        {display: 'City', name : 'city'},
-	        {display: 'State', name : 'state', isdefault: true}
-	        ],
+	        { display: 'City', name : 'city', isdefault: true },
+	        { display: 'State', name : 'state' }
+	    ],
 	    sortname: "city",
 	    sortorder: "asc",
 	    usepager: true,
+	    singleSelect : true,
 	    title: 'Listing all Citites',
 	    useRp: true,
 	    rp: 15,
-	    showTableToggleBtn: false,
-	    width: 700,
-	    height: 200
+	    showTableToggleBtn: true,
+	    width: 600,
+	    height: 200,
+	    preProcess : function (json) {
+	    	
+	    	var results = new Array();
+	    	jQuery.each(json.object, function() {
+	    		
+	    		var row = {};
+	    		var cell = new Array();
+	    		
+	    		jQuery.each(this, function(k, v) {
+	    			if (k == "state" && v == "") {
+	    				cell.push("NA");
+	    			} else {
+	    				cell.push(this);
+	    			}
+	    		});
+
+	    		row["cell"] = cell;
+	    		results.push(row);
+	    	});
+	    	
+	    	return {
+	    		rows : results,
+	    		page : json.pageCount,
+	    		total : json.total
+	    	};
+	    }
 	});
+
+    /* Function which processes the button actions for Grid City */
+    function cityGridButtonAction(command, grid) {
+
+    	/* Check which button did the user press */
+    	if (command == "Add") {
+    		/* Add button pressed. Re-direct the user to Add screen */
+    		alert("Add functionality not yet implemented");
+
+    	} else {
+    		/* For update, delete and view, the user needs to select a row
+    		 * before performing any operation.
+    		 */
+    		var selectedRowCount = $('.trSelected', grid).length;
+    		
+    		if (selectedRowCount == 0) {
+    			alert("Please select a row to perform this operation.");
+    			return ;
+    		}
+
+    		/* There is a selected row. Check what kind of operation did the
+    		 * user requested.
+    		 */
+    		 if (command == "Delete") {
+    			 /* User requested delete operation. */
+    			 alert("Delete functionality not yet implemented");
+    		 } else if (command == "Edit") {
+    			 /* User requested edit operation */
+    			 alert("Update functionality not yet implemented");
+    		 } else if (command == "View") {
+    			 /* User requested view operation */
+    			 alert("View functionality not yet implemented");
+    		 }
+    	}
+    }
     //-->
 </script>
 

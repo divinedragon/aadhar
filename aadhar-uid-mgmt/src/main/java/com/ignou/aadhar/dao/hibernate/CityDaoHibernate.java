@@ -139,6 +139,10 @@ public class CityDaoHibernate extends GenericDaoHibernate<City, Integer>
         /* Add the search parameters to the criteria */
         if (searchField != null && !searchField.isEmpty()
                 && searchValue != null && !searchValue.isEmpty()) {
+
+            /* Prefix and suffix the searchValue with % */
+            searchValue = "%" + searchValue + "%";
+
             /* Now there are only two fields which we can search here. */
             if ("city".equals(searchField)) {
                 criteria.add(Restrictions.ilike("c.city", searchValue));

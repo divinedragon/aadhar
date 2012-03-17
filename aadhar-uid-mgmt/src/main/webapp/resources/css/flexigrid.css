@@ -621,3 +621,17 @@ div.pGroup {
 	/* common inner cell properties*/ {
 	overflow: hidden;
 }
+
+/* Button Icons */
+.flexigrid div.fbutton .add {
+    background: url("images/plus.png") no-repeat scroll left center transparent;
+}
+.flexigrid div.fbutton .delete {
+    background: url("images/minus.png") no-repeat scroll left center transparent;
+}
+.flexigrid div.fbutton .edit {
+    background: url("images/edit.png") no-repeat scroll left center transparent;
+}
+.flexigrid div.fbutton .view {
+    background: url("images/info.png") no-repeat scroll left center transparent;
+}
