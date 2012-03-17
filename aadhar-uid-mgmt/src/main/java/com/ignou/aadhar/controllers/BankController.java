@@ -28,8 +28,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -37,61 +35,40 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ignou.aadhar.constants.Constants;
-import com.ignou.aadhar.domain.City;
-import com.ignou.aadhar.domain.State;
-import com.ignou.aadhar.editors.StateEditor;
-import com.ignou.aadhar.service.CityService;
-import com.ignou.aadhar.service.StateService;
-import com.ignou.aadhar.service.impl.StateServiceImpl;
+import com.ignou.aadhar.domain.Bank;
+import com.ignou.aadhar.service.BankService;
 import com.ignou.aadhar.util.json.JsonRequestValidator;
 import com.ignou.aadhar.util.json.JsonWrapper;
 
 /**
- * Controller to handle the requests for managing cities in the database.
+ * Controller to handle the requests for managing banks in the database.
  * @author Deepak Shakya
  *
  */
 @Controller
-@RequestMapping("/city")
-public class CityController {
+@RequestMapping("/bank")
+public class BankController {
 
     @Autowired
-    private CityService cityService;
-
-    @Autowired
-    private StateService stateService;
-
-    @InitBinder
-    public void initBinder(WebDataBinder dataBinder) {
-
-        /* Let's bind the conversion mechanism for States so that they are
-         * mapped correctly in the state attribute of City class.
-         */
-        dataBinder.registerCustomEditor(State.class,
-              new StateEditor(((StateServiceImpl) stateService).getStateDao()));
-    }
+    private BankService bankService;
 
     @RequestMapping(value = "/create", method = RequestMethod.GET)
     public String createForm(Model model) {
 
-        /* Lets create an empty city object to store the details */
-        City newCity = new City();
+        /* Lets create an empty bank object to store the details */
+        Bank newBank = new Bank();
 
-        /* Lets fetch all the states in the database */
-        List<State> states = stateService.list();
-
-        /* Add the empty city and all the states in the model so that they are
+        /* Add the empty bank and all the states in the model so that they are
          * available on the form.
          */
-        model.addAttribute("newCity", newCity);
-        model.addAttribute("states", states);
+        model.addAttribute("newBank", newBank);
 
         /* Re-direct the user to the form */
-        return "city/create";
+        return "bank/create";
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public String createCity(@Valid City newCity, BindingResult result)
+    public String createBank(@Valid Bank newBank, BindingResult result)
                                     throws Exception {
 
         /* Check if there was any error while binding the state object */
@@ -100,70 +77,45 @@ public class CityController {
             /* There was some error while binding the form data to java objects.
              * Lets re-direct the user back to the form.
              */
-            return "city/create";
+            return "bank/create";
         }
 
         /* No error while binding the form data to java objects */
-        /* Lets save the new city into the database */
-        City dbCity = cityService.add(newCity);
+        /* Lets save the new bank into the database */
+        Bank dbBank = bankService.add(newBank);
 
-        /* City added successfully. Lets re-direct to view page */
-        return "redirect:/city/" + dbCity.getId();
-    }
-
-    @RequestMapping(value = "/createAjax", method = RequestMethod.POST)
-    public JsonWrapper createAjaxCity(@Valid City newCity, String forAjax,
-                                BindingResult result) throws Exception {
-
-        String returnPage = createCity(newCity, result);
-
-        JsonWrapper output = new JsonWrapper();
-
-        /* Check if the record was created or not */
-        if ("city/create".equals(returnPage)) {
-            /* The user is not being re-directed. Set the error */
-            output.put("result", "error");
-            output.put("message", "Failed to create new city record.");
-        } else {
-            output.put("result", "success");
-            output.put("message", "New city record created successfully.");
-        }
-
-        return output;
+        /* Bank added successfully. Lets re-direct to view page */
+        return "redirect:/bank/" + dbBank.getId();
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
     public String viewById(@PathVariable Integer id, Model model) {
 
-        /* Get the city record from the database */
-        City city = cityService.read(id);
+        /* Get the bank record from the database */
+        Bank bank = bankService.read(id);
 
-        /* Add this city to model to make it available for the view page */
-        model.addAttribute("dbCity", city);
+        /* Add this bank to model to make it available for the view page */
+        model.addAttribute("dbBank", bank);
 
-        return "city/view";
+        return "bank/view";
     }
 
 
     @RequestMapping(value = "/edit", method = RequestMethod.GET)
     public String editForm(@RequestParam Integer id, Model model) {
 
-        /* Read the city object from the database */
-        City city = cityService.read(id);
+        /* Read the bank object from the database */
+        Bank bank = bankService.read(id);
 
-        /* Lets fetch all the states in the database */
-        List<State> states = stateService.list();
-
-        /* Save the database city to the model along with the states */
-        model.addAttribute("editCity", city);
-        model.addAttribute("states", states);
+        /* Save the database bank to the model along with the states */
+        model.addAttribute("editBank", bank);
 
         /* Re-direct the user to the form */
-        return "city/edit";
+        return "bank/edit";
     }
 
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
-    public String update(@Valid City editCity, BindingResult result)
+    public String update(@Valid Bank editBank, BindingResult result)
                                                      throws Exception {
 
         /* Check if there was any error while binding the state object */
@@ -173,38 +125,38 @@ public class CityController {
              * Lets re-direct the user back to the form.
              */
 
-            return "city/edit?id=" + editCity.getId();
+            return "bank/edit?id=" + editBank.getId();
         }
 
         /* No error while binding the form data to java objects */
-        /* Lets save the new city into the database */
-        City dbCity = cityService.modify(editCity);
+        /* Lets save the new bank into the database */
+        Bank dbBank = bankService.modify(editBank);
 
-        /* City added successfully. Lets re-direct to view page */
-        return "redirect:/city/" + dbCity.getId();
+        /* Bank added successfully. Lets re-direct to view page */
+        return "redirect:/bank/" + dbBank.getId();
     }
 
     @RequestMapping(value = "/delete", method = RequestMethod.GET)
     public String delete(@RequestParam Integer id, Model model) {
 
-        /* Read the city object from the database */
-        City city = cityService.read(id);
+        /* Read the bank object from the database */
+        Bank bank = bankService.read(id);
 
         /* We will delete the object only if we were able to fetch it from the
          * database.
          */
-        if (city != null && city.getId() != null) {
-            cityService.delete(city.getId());
+        if (bank != null && bank.getId() != null) {
+            bankService.delete(bank.getId());
         }
 
         /* Re-direct the user to the form */
-        return "redirect:/city/create";
+        return "redirect:/bank/create";
     }
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public String list() {
 
-        return "city/grid";
+        return "bank/grid";
     }
 
     @RequestMapping(value = "/list/json", method = RequestMethod.GET)
@@ -232,11 +184,11 @@ public class CityController {
             startIndex = (page - 1) * recordCount;
         }
 
-        /* Also, if there is no search parameter provided, we will assign city
+        /* Also, if there is no search parameter provided, we will assign bank
          * as the default search parameter.
          */
         if (searchField == null || searchField.isEmpty()) {
-            searchField = "city";
+            searchField = "bank";
         }
 
         /* Lets start preparing the JSON output */
@@ -247,7 +199,7 @@ public class CityController {
         outputData.append("\"sortorder\" : \"" + sortOrder + "\", ");
         outputData.append("\"" + searchField + "\": \"" + searchValue + "\" }");
 
-        JsonWrapper jsonData = getCityList(outputData.toString());
+        JsonWrapper jsonData = getBankList(outputData.toString());
 
         /* Add the additional parameters required at the UI */
         jsonData.addParam("pageCount", page);
@@ -260,11 +212,11 @@ public class CityController {
 
     @RequestMapping(value = "/list/{filter}", method = RequestMethod.GET)
     @ResponseBody
-    private JsonWrapper getCityList(@PathVariable String filter) {
+    private JsonWrapper getBankList(@PathVariable String filter) {
 
         JsonWrapper jsonData;
 
-        String[] validParams = {"page","rp","sortname","sortorder","city","state"};
+        String[] validParams = {"page","rp","sortname","sortorder","name","url"};
 
         try {
             Map<String, String> paramMap = JsonRequestValidator
@@ -288,30 +240,25 @@ public class CityController {
             }
 
             /* Determine which field is being searched */
-            if (paramMap.get("city") != null) {
-                searchField = "city";
-                searchValue = paramMap.get("city");
-            }
-
-            if (paramMap.get("state") != null) {
-                searchField = "state";
-                searchValue = paramMap.get("state");
+            if (paramMap.get("bank") != null) {
+                searchField = "bank";
+                searchValue = paramMap.get("bank");
             }
 
             /* Lets fetch the records from the database for the search condition
              * provided in the request.
              */
-            List<Map<String, Object>> cities = cityService.getCities(
+            List<Map<String, Object>> banks = bankService.getBanks(
                                                     searchField, searchValue,
                                                     pageNumber, recordsPerPage,
                                                     sortField, sortOrder);
 
             /* Check if any records were fetched successfully */
-            if (cities != null && !cities.isEmpty()) {
+            if (banks != null && !banks.isEmpty()) {
 
-                /* Convert the city data as Json Wrapper instance */
-                jsonData = new JsonWrapper(cities, "Success");
-                jsonData.put("total", cities.get(0).get("totalCount"));
+                /* Convert the bank data as Json Wrapper instance */
+                jsonData = new JsonWrapper(banks, "Success");
+                jsonData.put("total", banks.get(0).get("totalCount"));
             } else {
 
                 /* Because no records were fetched, we will return empty list */

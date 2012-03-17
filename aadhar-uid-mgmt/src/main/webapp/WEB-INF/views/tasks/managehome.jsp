@@ -17,6 +17,7 @@
 
 <style type="text/css">
     .flexigrid div.sDiv2 .qsbox { width:100px }
+    #indicator {position:absolute; bottom:40%;left:40%;}
 </style>
 <div id="page-heading"><h1>Manage City, District and States</h1></div>
 
@@ -38,12 +39,12 @@
     <table border="0" width="100%" cellpadding="0" cellspacing="0">
     <tr valign="top">
     <td>
-        <div style="float:left">
+        <div style="float:left;margin-right:10px;">
             <h2>All States</h2>
             <div id="stateTable"></div>
         </div>
 
-        <div style="float:left">
+        <div style="float:left;margin-right:10px;">
             <h2>All Districts</h2>
             <div id="districtTable"></div>
         </div>
@@ -76,16 +77,9 @@
 </table>
 
 <!-- modal content -->
-<div id="basic-modal-content">
-    <h3>Basic Modal Dialog</h3>
-    <p>For this demo, SimpleModal is using this "hidden" data for its content. You can also populate the modal dialog with an AJAX response, standard HTML or DOM element(s).</p>
-    <p>Examples:</p>
-    <p><code>$('#basicModalContent').modal(); // jQuery object - this demo</code></p>
-    <p><code>$.modal(document.getElementById('basicModalContent')); // DOM</code></p>
-    <p><code>$.modal('&lt;p&gt;&lt;b&gt;HTML&lt;/b&gt; elements&lt;/p&gt;'); // HTML</code></p>
-    <p><code>$('&lt;div&gt;&lt;/div&gt;').load('page.html').modal(); // AJAX</code></p>
-
-    <p><a href='http://www.ericmmartin.com/projects/simplemodal/'>More details...</a></p>
+<div id="basic-modal-content" style="position:relative;">
+    <iframe src="../city/create" style="border:0px;height:350px;width:100%;overflow:hidden;"></iframe>
+    <div id="indicator"><img src="../images/ajax-loader.gif"/></div>
 </div>
 
 <script type="text/javascript" src="../js/flexigrid.js"></script>
@@ -97,37 +91,37 @@
         url: '../city/list/json',
         method : "GET",
         dataType: 'json',
-	    colModel : [
+        colModel : [
             {
-            	display: 'Id',
-            	name : 'id',
-            	width : 20,
-            	sortable : true,
-            	align: 'left',
-            	hide : true
+                display: 'Id',
+                name : 'id',
+                width : 20,
+                sortable : true,
+                align: 'left',
+                hide : true
             },
             {
-            	display: 'City',
-            	name : 'city',
-            	width : 160,
-            	sortable : true,
-            	align: 'left'
+                display: 'City',
+                name : 'city',
+                width : 160,
+                sortable : true,
+                align: 'left'
             },
-	        {
-            	display: 'State',
-            	name : 'state',
-            	width : 160,
-            	sortable : true,
-            	align: 'left'
+            {
+                display: 'State',
+                name : 'state',
+                width : 160,
+                sortable : true,
+                align: 'left'
             }
-	    ],
-	    buttons : [
-	        {
-	        	name: 'Add',
-	        	bclass: 'add',
-	        	onpress : cityGridButtonAction
-	        },
-	        {
+        ],
+        buttons : [
+            {
+                name: 'Add',
+                bclass: 'add',
+                onpress : cityGridButtonAction
+            },
+            {
                 name: 'Edit',
                 bclass: 'edit',
                 onpress : cityGridButtonAction
@@ -137,88 +131,88 @@
                 bclass: 'view',
                 onpress : cityGridButtonAction
             },
-	        {
-	        	name: 'Delete',
-	        	bclass: 'delete',
-	        	onpress : cityGridButtonAction
-	        },
-	        {separator: true}
-	    ],
-	    searchitems : [
-	        { display: 'City', name : 'city', isdefault: true },
-	        { display: 'State', name : 'state' }
-	    ],
-	    sortname: "city",
-	    sortorder: "asc",
-	    usepager: true,
-	    singleSelect : true,
-	    title: 'Listing all Citites',
-	    useRp: true,
-	    rp: 50,
-	    showTableToggleBtn: true,
-	    width: 350,
-	    height: 250,
-	    preProcess : function (json) {
-	    	
-	    	var results = new Array();
-	    	jQuery.each(json.object, function() {
-	    		
-	    		var row = {};
-	    		var cell = new Array();
-	    		
-	    		jQuery.each(this, function(k, v) {
-	    			if (k == "state" && v == "") {
-	    				cell.push("NA");
-	    			} else {
-	    				cell.push(this);
-	    			}
-	    		});
+            {
+                name: 'Delete',
+                bclass: 'delete',
+                onpress : cityGridButtonAction
+            },
+            {separator: true}
+        ],
+        searchitems : [
+            { display: 'City', name : 'city', isdefault: true },
+            { display: 'State', name : 'state' }
+        ],
+        sortname: "city",
+        sortorder: "asc",
+        usepager: true,
+        singleSelect : true,
+        title: 'Listing all Citites',
+        useRp: true,
+        rp: 50,
+        showTableToggleBtn: true,
+        width: 350,
+        height: 250,
+        preProcess : function (json) {
+            
+            var results = new Array();
+            jQuery.each(json.object, function() {
+                
+                var row = {};
+                var cell = new Array();
+                
+                jQuery.each(this, function(k, v) {
+                    if (k == "state" && v == "") {
+                        cell.push("NA");
+                    } else {
+                        cell.push(this);
+                    }
+                });
 
-	    		row["cell"] = cell;
-	    		results.push(row);
-	    	});
-	    	
-	    	return {
-	    		rows : results,
-	    		page : json.pageCount,
-	    		total : json.total
-	    	};
-	    }
-	});
+                row["cell"] = cell;
+                results.push(row);
+            });
+            
+            return {
+                rows : results,
+                page : json.pageCount,
+                total : json.total
+            };
+        }
+    });
 
     /* Function which processes the button actions for Grid City */
     function cityGridButtonAction(command, grid) {
 
-    	/* Check which button did the user press */
-    	if (command == "Add") {
-    		/* Add button pressed. Re-direct the user to Add screen */
-    		alert("Add functionality not yet implemented");
+        /* Check which button did the user press */
+        if (command == "Add") {
+            /* Add button pressed. Re-direct the user to Add screen */
+            alert("Add functionality not yet implemented");
 
-    	} else {
-    		/* For update, delete and view, the user needs to select a row
-    		 * before performing any operation.
-    		 */
-    		var selectedRowCount = $('.trSelected', grid).length;
-    		
-    		if (selectedRowCount == 0) {
-    			alert("Please select a row to perform this operation.");
-    			return ;
-    		}
+        } else {
+            /* For update, delete and view, the user needs to select a row
+             * before performing any operation.
+             */
+            var selectedRowCount = $('.trSelected', grid).length;
+            
+            if (selectedRowCount == 0) {
+                alert("Please select a row to perform this operation.");
+                return ;
+            }
 
-    		/* There is a selected row. Check what kind of operation did the
-    		 * user requested.
-    		 */
-    		 if (command == "Delete") {
-    			 /* User requested delete operation. */
-    			 alert("Delete functionality not yet implemented");
-    		 } else if (command == "Edit") {
-    			 /* User requested edit operation */
-    			 alert("Update functionality not yet implemented");
-    		 } else if (command == "View") {
-    			 /* User requested view operation */
-    			 alert("View functionality not yet implemented");
-    		 }
-    	}
+            /* There is a selected row. Check what kind of operation did the
+             * user requested.
+             */
+             if (command == "Delete") {
+                 /* User requested delete operation. */
+                 alert("Delete functionality not yet implemented");
+             } else if (command == "Edit") {
+                 /* User requested edit operation */
+                 alert("Update functionality not yet implemented");
+             } else if (command == "View") {
+                 /* User requested view operation */
+                 alert("View functionality not yet implemented");
+             }
+        }
     }
 
     /* Flexigrid for District Table */
@@ -404,7 +398,7 @@
 <script type="text/javascript" src="../js/jquery.simplemodal.js"></script>
 <script type="text/javascript">
     $(function() {
-    	$('#basic-modal-content').modal();
+        $('#basic-modal-content').modal();
     });
 </script>
 
