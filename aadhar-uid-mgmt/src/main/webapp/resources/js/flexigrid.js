@@ -352,12 +352,14 @@
 								var td = document.createElement('td');
 								var idx = $(this).attr('axis').substr(3);
 								td.align = this.align;
+
 								// If the json elements aren't named (which is typical), use numeric order
-								if (typeof row.cell[idx] != "undefined") {
+								if (typeof row.cell[idx] == "undefined") {
 									td.innerHTML = (row.cell[idx] != null) ? row.cell[idx] : '';//null-check for Opera-browser
 								} else {
 									td.innerHTML = row.cell[p.colModel[idx].name];
 								}
+
 								$(td).attr('abbr', $(this).attr('abbr'));
 								$(tr).append(td);
 								td = null;

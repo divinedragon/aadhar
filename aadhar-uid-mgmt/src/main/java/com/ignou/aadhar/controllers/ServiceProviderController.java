@@ -35,142 +35,153 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ignou.aadhar.constants.Constants;
-import com.ignou.aadhar.domain.State;
-import com.ignou.aadhar.service.StateService;
+import com.ignou.aadhar.domain.ServiceProvider;
+import com.ignou.aadhar.service.ServiceProviderService;
 import com.ignou.aadhar.util.json.JsonRequestValidator;
 import com.ignou.aadhar.util.json.JsonWrapper;
 
 /**
- * Controller to handle the requests for managing cities in the database.
+ * Controller to handle the requests for managing Service Providers in the
+ * database.
  * @author Deepak Shakya
  *
  */
 @Controller
-@RequestMapping("/state")
-public class StateController {
+@RequestMapping("/serviceprovider")
+public class ServiceProviderController {
 
     @Autowired
-    private StateService stateService;
+    private ServiceProviderService serviceProviderService;
 
     @RequestMapping(value = "/create", method = RequestMethod.GET)
     public String createForm(Model model) {
 
-        /* Lets create an empty state object to store the details */
-        State newState = new State();
+        /* Lets create an empty Service Provider object to store the details */
+        ServiceProvider newServiceProvider = new ServiceProvider();
 
-        /* Add the empty state and all the states in the model so that they are
+        /* Add the empty serviceprovider in the model so that they are
          * available on the form.
          */
-        model.addAttribute("newState", newState);
+        model.addAttribute("newServiceProvider", newServiceProvider);
 
         /* Re-direct the user to the form */
-        return "state/create";
+        return "serviceprovider/create";
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public String createState(@Valid State newState, BindingResult result)
-                                    throws Exception {
+    public String createServiceProvider(
+                                @Valid ServiceProvider newServiceProvider,
+                                        BindingResult result) throws Exception {
 
-        /* Check if there was any error while binding the state object */
+        /* Check if there was any error while binding the
+         * Service Provider object */
         if (result.hasErrors()) {
 
             /* There was some error while binding the form data to java objects.
              * Lets re-direct the user back to the form.
              */
 
-            return "state/create";
+            return "serviceprovider/create";
         }
 
         /* No error while binding the form data to java objects */
-        /* Lets save the new state into the database */
-        State dbState = stateService.add(newState);
+        /* Lets save the new Service Provider into the database */
+        ServiceProvider dbServiceProvider = serviceProviderService
+                                                .add(newServiceProvider);
 
-        /* State added successfully. Lets re-direct to view page */
-        return "redirect:/state/" + dbState.getId();
+        /* ServiceProvider added successfully. Lets re-direct to view page */
+        return "redirect:/serviceprovider/" + dbServiceProvider.getId();
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
     public String viewById(@PathVariable Integer id, Model model) {
 
-        /* Get the state record from the database */
-        State state = stateService.read(id);
+        /* Get the Service Provider record from the database */
+        ServiceProvider serviceProvider = serviceProviderService.read(id);
 
         /* Check if the record was fetched successfully */
-        if (state == null || state.getId() == null) {
+        if (serviceProvider == null || serviceProvider.getId() == null) {
             /* The record for the corresponding id does not exist */
-            model.addAttribute("msg", "No State details exist for ID - " + id);
+            model.addAttribute("msg", "No Service Provider details exist for ID"
+                                        + " - " + id);
             return "common/error";
         }
 
-        /* Add this state to model to make it available for the view page */
-        model.addAttribute("dbState", state);
+        /* Add this serviceprovider to model to make it available for the view
+         * page
+         */
+        model.addAttribute("dbServiceProvider", serviceProvider);
 
-        return "state/view";
+        return "serviceprovider/view";
     }
 
 
     @RequestMapping(value = "/edit", method = RequestMethod.GET)
     public String editForm(@RequestParam Integer id, Model model) {
 
-        /* Read the state object from the database */
-        State state = stateService.read(id);
+        /* Read the Service Provider object from the database */
+        ServiceProvider serviceProvider = serviceProviderService.read(id);
 
         /* Check if the record was fetched successfully */
-        if (state == null || state.getId() == null) {
+        if (serviceProvider == null || serviceProvider.getId() == null) {
             /* The record for the corresponding id does not exist */
-            model.addAttribute("msg", "No State details exist for ID - " + id);
+            model.addAttribute("msg", "No Service Provider details exist for ID"
+                                        + " - " + id);
             return "common/error";
         }
 
-        /* Save the database state to the model along with the states */
-        model.addAttribute("editState", state);
+        /* Save the database serviceprovider to the model */
+        model.addAttribute("editServiceProvider", serviceProvider);
 
         /* Re-direct the user to the form */
-        return "state/edit";
+        return "serviceprovider/edit";
     }
 
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
-    public String update(@Valid State editState, BindingResult result)
-                                                     throws Exception {
+    public String update(@Valid ServiceProvider editServiceProvider,
+                                    BindingResult result) throws Exception {
 
-        /* Check if there was any error while binding the state object */
+        /* Check if there was any error while binding the Service Provider
+         * object
+         */
         if (result.hasErrors()) {
 
             /* There was some error while binding the form data to java objects.
              * Lets re-direct the user back to the form.
              */
-            return "state/edit?id=" + editState.getId();
+            return "serviceprovider/edit?id=" + editServiceProvider.getId();
         }
 
         /* No error while binding the form data to java objects */
-        /* Lets save the new state into the database */
-        State dbState = stateService.modify(editState);
+        /* Lets save the Service Provider into the database */
+        ServiceProvider dbServiceProvider = serviceProviderService
+                                                .modify(editServiceProvider);
 
-        /* State added successfully. Lets re-direct to view page */
-        return "redirect:/state/" + dbState.getId();
+        /* Service Provider added successfully. Lets re-direct to view page */
+        return "redirect:/serviceprovider/" + dbServiceProvider.getId();
     }
 
     @RequestMapping(value = "/delete", method = RequestMethod.GET)
     public String delete(@RequestParam Integer id, Model model) {
 
-        /* Read the state object from the database */
-        State state = stateService.read(id);
+        /* Read the Service Provider object from the database */
+        ServiceProvider serviceProvider = serviceProviderService.read(id);
 
         /* We will delete the object only if we were able to fetch it from the
          * database.
          */
-        if (state != null && state.getId() != null) {
-            stateService.delete(state.getId());
+        if (serviceProvider != null && serviceProvider.getId() != null) {
+            serviceProviderService.delete(serviceProvider.getId());
         }
 
         /* Re-direct the user to the form */
-        return "redirect:/state/create";
+        return "redirect:/serviceprovider/grid";
     }
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public String list() {
 
-        return "state/grid";
+        return "serviceprovider/grid";
     }
 
     @RequestMapping(value = "/list/json", method = RequestMethod.GET)
@@ -198,11 +209,11 @@ public class StateController {
             startIndex = (page - 1) * recordCount;
         }
 
-        /* Also, if there is no search parameter provided, we will assign state
-         * as the default search parameter.
+        /* Also, if there is no search parameter provided, we will assign
+         * serviceProvider as the default search parameter.
          */
         if (searchField == null || searchField.isEmpty()) {
-            searchField = "state";
+            searchField = "name";
         }
 
         /* Lets start preparing the JSON output */
@@ -213,7 +224,7 @@ public class StateController {
         outputData.append("\"sortorder\" : \"" + sortOrder + "\", ");
         outputData.append("\"" + searchField + "\": \"" + searchValue + "\" }");
 
-        JsonWrapper jsonData = getStateList(outputData.toString());
+        JsonWrapper jsonData = getServiceProviderList(outputData.toString());
 
         /* Add the additional parameters required at the UI */
         jsonData.addParam("pageCount", page);
@@ -226,11 +237,12 @@ public class StateController {
 
     @RequestMapping(value = "/list/{filter}", method = RequestMethod.GET)
     @ResponseBody
-    private JsonWrapper getStateList(@PathVariable String filter) {
+    private JsonWrapper getServiceProviderList(@PathVariable String filter) {
 
         JsonWrapper jsonData;
 
-        String[] validParams = {"page","rp","sortname","sortorder","state","state"};
+        String[] validParams = {"page","rp","sortname","sortorder","name",
+                "requestUrl","responseUrl","accountNumber","bankIFSCCode"};
 
         try {
             Map<String, String> paramMap = JsonRequestValidator
@@ -254,25 +266,41 @@ public class StateController {
             }
 
             /* Determine which field is being searched */
-            if (paramMap.get("state") != null) {
-                searchField = "state";
-                searchValue = paramMap.get("state");
+            if (paramMap.get("name") != null) {
+                searchField = "name";
+                searchValue = paramMap.get("name");
+
+            } else if (paramMap.get("requestUrl") != null) {
+                searchField = "requestUrl";
+                searchValue = paramMap.get("requestUrl");
+
+            } else if (paramMap.get("responseUrl") != null) {
+                searchField = "responseUrl";
+                searchValue = paramMap.get("responseUrl");
+
+            } else if (paramMap.get("accountNumber") != null) {
+                searchField = "accountNumber";
+                searchValue = paramMap.get("accountNumber");
+
+            } else if (paramMap.get("bankIFSCCode") != null) {
+                searchField = "bankIFSCCode";
+                searchValue = paramMap.get("bankIFSCode");
             }
 
             /* Lets fetch the records from the database for the search condition
              * provided in the request.
              */
-            List<Map<String, Object>> states = stateService.getStates(
-                                                    searchField, searchValue,
-                                                    pageNumber, recordsPerPage,
-                                                    sortField, sortOrder);
+            List<Map<String, Object>> serviceProviders = serviceProviderService
+                               .getServiceProviders(searchField, searchValue,
+                                       pageNumber, recordsPerPage, sortField,
+                                       sortOrder);
 
             /* Check if any records were fetched successfully */
-            if (states != null && !states.isEmpty()) {
+            if (serviceProviders != null && !serviceProviders.isEmpty()) {
 
-                /* Convert the state data as Json Wrapper instance */
-                jsonData = new JsonWrapper(states, "Success");
-                jsonData.put("total", states.get(0).get("totalCount"));
+                /* Convert the serviceProvider data as Json Wrapper instance */
+                jsonData = new JsonWrapper(serviceProviders, "Success");
+                jsonData.put("total", serviceProviders.get(0).get("totalCount"));
             } else {
 
                 /* Because no records were fetched, we will return empty list */

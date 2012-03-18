@@ -84,8 +84,8 @@ public class ServiceProvider implements Serializable {
     /**
      * Bank IFS Code required to perform the transaction successfully.
      */
-    @Column(name = "BankIFSCode")
-    private String bankIFSCode;
+    @Column(name = "BankIFSCCode")
+    private String bankIFSCCode;
 
     public Integer getId() {
         return id;
@@ -135,11 +135,11 @@ public class ServiceProvider implements Serializable {
         this.accountNumber = accountNumber;
     }
 
-    public String getBankIFSCode() {
-        return bankIFSCode;
+    public String getBankIFSCCode() {
+        return bankIFSCCode;
     }
 
     public void setBankIFSCode(String bankIFSCode) {
-        this.bankIFSCode = bankIFSCode;
+        this.bankIFSCCode = bankIFSCCode;
     }
 }
