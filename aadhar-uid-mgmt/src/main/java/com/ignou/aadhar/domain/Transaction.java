@@ -35,7 +35,8 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "transaction")
-public class Transaction extends AbstractTimestampEntity implements Serializable {
+public class Transaction
+                    extends AbstractTimestampEntity implements Serializable {
 
     /**
      * Auto-generated serialization id.

@@ -106,7 +106,7 @@ public final class Verhoeff {
 
     /**
      * Converts a string to a reversed integer array.
-     * @param num The numeric string data convered to reversed int array.
+     * @param num The numeric string data converted to reversed int array.
      * @return Integer array containing the digits in the numeric string
      * provided in reverse.
      */
@@ -123,7 +123,6 @@ public final class Verhoeff {
         return myArray;
 
     }
-
 
     /**
      * Reverses an int array.

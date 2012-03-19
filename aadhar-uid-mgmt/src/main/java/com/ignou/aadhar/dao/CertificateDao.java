@@ -23,7 +23,8 @@ import java.util.Map;
 import com.ignou.aadhar.domain.Certificate;
 
 /**
- * Data Access Object providing methods to perform operations on table - Certificate.
+ * Data Access Object providing methods to perform operations on
+ * table - Certificate.
  * @author Deepak Shakya
  *
  */

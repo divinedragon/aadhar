@@ -100,7 +100,7 @@ public class BankController {
             model.addAttribute("msg", "No bank details exist for ID - " + id);
             return "common/error";
         }
-        
+
         /* Add this bank to model to make it available for the view page */
         model.addAttribute("dbBank", bank);
 
@@ -120,7 +120,7 @@ public class BankController {
             model.addAttribute("msg", "No bank details exist for ID - " + id);
             return "common/error";
         }
-        
+
         /* Save the database bank to the model along with the states */
         model.addAttribute("editBank", bank);
 

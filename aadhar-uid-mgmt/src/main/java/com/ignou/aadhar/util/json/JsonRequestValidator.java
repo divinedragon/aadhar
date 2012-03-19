@@ -41,7 +41,8 @@ public class JsonRequestValidator {
     public static Map<String, String> validateRequestParams(String jsonString,
             String[] validParams) {
 
-        Map<String, String> paramMap = (HashMap<String, String>) JsonMarshaller.parse(jsonString, HashMap.class);
+        Map<String, String> paramMap = (HashMap<String, String>) JsonMarshaller
+                                        .parse(jsonString, HashMap.class);
 
         if (paramMap == null || paramMap.isEmpty()) {
             throw new IllegalArgumentException("Invalid Parameters : Empty/Invalid parameter list");

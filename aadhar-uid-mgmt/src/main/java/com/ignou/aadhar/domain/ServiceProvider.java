@@ -139,7 +139,7 @@ public class ServiceProvider implements Serializable {
         return bankIFSCCode;
     }
 
-    public void setBankIFSCode(String bankIFSCode) {
+    public void setBankIFSCCode(String bankIFSCCode) {
         this.bankIFSCCode = bankIFSCCode;
     }
 }

@@ -95,7 +95,7 @@ public class BankServiceImpl implements BankService {
             String searchValue, Integer pageNumber, Integer recordsPerPage,
             String sortField, String sortOrder) {
 
-        return bankDao.getBanks(searchField, searchValue, pageNumber, 
+        return bankDao.getBanks(searchField, searchValue, pageNumber,
                 recordsPerPage, sortField, sortOrder);
     }
 }

@@ -3,7 +3,7 @@
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%
-    String PAGE_TITLE = ":: Aadhar :: Add New Bank";
+    String PAGE_TITLE = ":: Aadhar :: View Service Provider";
 %>
 <%@include file="../common/include_header.jsp" %>
 
@@ -19,7 +19,7 @@
 <link type='text/css' href='../css/basic_ie.css' rel='stylesheet' media='screen' />
 <![endif]-->
 
-<div id="page-heading"><h1>Add New Bank</h1></div>
+<div id="page-heading"><h1>View Service Provider Details - ID #${dbServiceProvider.id}</h1></div>
 
 <table border="0" width="100%" cellpadding="0" cellspacing="0" id="content-table">
 <tr>
@@ -34,29 +34,43 @@
     <td>
     <!--  start content-table-inner -->
     <div id="content-table-inner">
-    <h2>Enter new bank details</h2>
+    <h2>Service Provider Details</h2>
     <table border="0" width="100%" cellpadding="0" cellspacing="0">
     <tr valign="top">
     <td>
-        <form:form id="bankForm" method="post" action="create" modelAttribute="newBank">
-            <table>
-		    <tr>
-		        <td><label for="txtName">Bank Name :</label></td>
-		        <td><form:input path="name" id="txtName" maxlength="200" /></td> 
-		    </tr>
-		    <tr>
-                <td><label for="txtUrl">URL :</label></td>
-                <td><form:input path="url" id="txtUrl" maxlength="200" /></td> 
+        <table>
+            <tr>
+                <td>Service Provider ID :</td>
+                <td>${dbServiceProvider.id}</td> 
             </tr>
-		    <tr>
-		        <td colspan="2">
-		            <input type="submit" value="Add Bank" class="form-submit" />
-		            <input type="reset" value="Reset" class="form-reset"/>
-		        </td>
-		    </tr>
-		    </table>
-		</form:form>
-		<a href="list">List all Banks</a>
+            <tr>
+                <td>Name :</td>
+                <td>${dbServiceProvider.name}</td> 
+            </tr>
+            <tr>
+                <td>Request URL :</td>
+                <td>${dbServiceProvider.requestUrl}</td> 
+            </tr>
+            <tr>
+                <td>Response URL :</td>
+                <td>${dbServiceProvider.responseUrl}</td> 
+            </tr>
+            <tr>
+                <td>Account Number :</td>
+                <td>${dbServiceProvider.accountNumber}</td> 
+            </tr>
+            <tr>
+                <td>Bank IFSC Code :</td>
+                <td>${dbServiceProvider.bankIFSCCode}</td> 
+            </tr>
+        </table>
+        <a href="list">List all Service Providers</a>
+        &nbsp;|&nbsp;
+        <a href="create">Add New Service Provider</a>
+        &nbsp;|&nbsp;
+        <a href="edit?id=${dbBank.id}">Edit this Service Provider</a>
+        &nbsp;|&nbsp;
+        <a href="delete?id=${dbBank.id}">Delete this Service Provider</a>
     </td>
     </tr>
     <tr>
@@ -79,26 +93,5 @@
     <th class="sized bottomright"></th>
 </tr>
 </table>
-
-<script src="../js/jquery/jquery.validate.js" type="text/javascript"></script>
-<script src="../js/jquery/jquery.validation.functions.js" type="text/javascript"></script>
-<script type="text/javascript">
-    /* <![CDATA[ */
-    jQuery(function(){
-        jQuery("#txtName").validate({
-            expression: "if (VAL.match(/^[A-Za-z\s]{3,100}$/)) return true; else return false;",
-            message: "Only Alphabets allowed with minimum 3 characters"
-        });
-        jQuery("#txtUrl").validate({
-        	expression: "if (VAL.length > 5 && VAL) return true; else return false;",
-            message: "Please provide a valid url"
-        });
-
-        jQuery('#bankForm').validated(function(){
-            $('#bankForm').submit();
-        });
-    });
-    /* ]]> */
-</script>
 
 <%@include file="../common/footer.jsp" %>

@@ -80,8 +80,8 @@ public class DistrictController {
         /* Lets fetch all the states in the database */
         List<State> states = stateService.list();
 
-        /* Add the empty district and all the states in the model so that they are
-         * available on the form.
+        /* Add the empty district and all the states in the model so that they
+         * are available on the form.
          */
         model.addAttribute("newDistrict", newDistrict);
         model.addAttribute("states", states);
@@ -91,8 +91,8 @@ public class DistrictController {
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public String createDistrict(@Valid District newDistrict, BindingResult result)
-                                    throws Exception {
+    public String createDistrict(@Valid District newDistrict,
+                                        BindingResult result) throws Exception {
 
         /* Check if there was any error while binding the state object */
         if (result.hasErrors()) {
@@ -212,8 +212,8 @@ public class DistrictController {
             startIndex = (page - 1) * recordCount;
         }
 
-        /* Also, if there is no search parameter provided, we will assign district
-         * as the default search parameter.
+        /* Also, if there is no search parameter provided, we will assign
+         * district as the default search parameter.
          */
         if (searchField == null || searchField.isEmpty()) {
             searchField = "district";
@@ -244,7 +244,8 @@ public class DistrictController {
 
         JsonWrapper jsonData;
 
-        String[] validParams = {"page","rp","sortname","sortorder","district","state"};
+        String[] validParams = {"page", "rp", "sortname", "sortorder",
+                                    "district", "state"};
 
         try {
             Map<String, String> paramMap = JsonRequestValidator

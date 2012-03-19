@@ -34,7 +34,7 @@
     <td>
     <!--  start content-table-inner -->
     <div id="content-table-inner">
-    <h2>New Bank Details</h2>
+    <h2>Bank Details</h2>
     <table border="0" width="100%" cellpadding="0" cellspacing="0">
     <tr valign="top">
     <td>
@@ -48,7 +48,7 @@
 		        <td>${dbBank.name}</td> 
 		    </tr>
 		    <tr>
-                <td>Bank ID :</td>
+                <td>URL :</td>
                 <td>${dbBank.url}</td> 
             </tr>
 		</table>

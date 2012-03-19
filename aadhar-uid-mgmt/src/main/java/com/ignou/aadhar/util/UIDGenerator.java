@@ -39,7 +39,8 @@ public final class UIDGenerator {
         StringBuilder generatedUID = new StringBuilder();
 
         /* Check if the valid type was provided or not */
-        if (UIDTypes.CITIZEN.equals(type) || UIDTypes.ORGANIZATIONS.equals(type)) {
+        if (UIDTypes.CITIZEN.equals(type)
+                || UIDTypes.ORGANIZATIONS.equals(type)) {
 
             /* Get the current timestamp in milliseconds */
             generatedUID.append(System.currentTimeMillis());

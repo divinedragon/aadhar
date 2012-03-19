@@ -28,7 +28,8 @@ import com.ignou.aadhar.domain.ServiceProvider;
  * @author Deepak Shakya
  *
  */
-public interface ServiceProviderService extends GenericService<ServiceProvider> {
+public interface ServiceProviderService
+                                    extends GenericService<ServiceProvider> {
 
     /**
      * Gets the records from the Database based on the parameters provided.

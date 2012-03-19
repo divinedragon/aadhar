@@ -230,7 +230,7 @@ public class StateController {
 
         JsonWrapper jsonData;
 
-        String[] validParams = {"page","rp","sortname","sortorder","state","state"};
+        String[] validParams = {"page", "rp", "sortname", "sortorder", "state"};
 
         try {
             Map<String, String> paramMap = JsonRequestValidator

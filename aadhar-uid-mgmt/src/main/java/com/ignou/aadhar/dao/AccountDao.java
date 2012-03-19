@@ -21,7 +21,7 @@ package com.ignou.aadhar.dao;
 import com.ignou.aadhar.domain.Account;
 
 /**
- * Data Access Object providing methods to perform operations on table - Account.
+ * Data Access Object providing methods to perform operation on table - Account.
  * @author Deepak Shakya
  *
  */

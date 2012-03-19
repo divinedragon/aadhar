@@ -33,9 +33,7 @@
     <table border="0" width="100%" cellpadding="0" cellspacing="0">
     <tr valign="top">
     <td>
-        <div style="float:left;margin-right:10px;">
-            <div id="serviceProviderTable"></div>
-        </div>
+        <div id="serviceProviderTable"></div>
     </td>
     </tr>
     <tr>
@@ -150,7 +148,7 @@
         useRp: true,
         rp: 50,
         showTableToggleBtn: true,
-        width: 900,
+        width: 100%,
         height: 300,
         preProcess : function (json) {
             

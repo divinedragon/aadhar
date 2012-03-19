@@ -3,7 +3,7 @@
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%
-    String PAGE_TITLE = ":: Aadhar :: Edit Bank Details";
+    String PAGE_TITLE = ":: Aadhar :: Add New Service Provider";
 %>
 <%@include file="../common/include_header.jsp" %>
 
@@ -19,7 +19,7 @@
 <link type='text/css' href='../css/basic_ie.css' rel='stylesheet' media='screen' />
 <![endif]-->
 
-<div id="page-heading"><h1>View Banks Details - ID # ${id}</h1></div>
+<div id="page-heading"><h1>Add New Service Provider</h1></div>
 
 <table border="0" width="100%" cellpadding="0" cellspacing="0" id="content-table">
 <tr>
@@ -34,34 +34,49 @@
     <td>
     <!--  start content-table-inner -->
     <div id="content-table-inner">
-    <h2>New Bank Details</h2>
+    <h2>Enter new Service Provider details</h2>
     <table border="0" width="100%" cellpadding="0" cellspacing="0">
     <tr valign="top">
     <td>
-        <form:form id="bankForm" method="post" action="edit" modelAttribute="editBank">
-            <form:hidden path="id" value="${id}" />
+        <form:form id="serviceProviderForm" method="post" action="create" modelAttribute="newServiceProvider">
             <table>
             <tr>
-                <td><label for="txtName">Bank Name :</label></td>
+                <td><label for="txtName">Name :</label></td>
                 <td><form:input path="name" id="txtName" maxlength="200" /></td> 
             </tr>
             <tr>
-                <td><label for="txtUrl">URL :</label></td>
-                <td><form:input path="url" id="txtUrl" maxlength="200" /></td> 
+                <td><label for="txtPassword">Password :</label></td>
+                <td><form:password path="password" id="txtPassword" /></td> 
+            </tr>
+            <tr>
+                <td><label for="txtConfirmPassword">Confirm Password :</label></td>
+                <td><input type="password" id="txtConfirmPassword" /></td> 
+            </tr>
+            <tr>
+                <td><label for="txtRequestUrl">Request URL :</label></td>
+                <td><form:input path="requestUrl" id="txtRequestUrl" /></td> 
+            </tr>
+            <tr>
+                <td><label for="txtResponseUrl">Request URL :</label></td>
+                <td><form:input path="responseUrl" id="txtResponseUrl" /></td> 
+            </tr>
+            <tr>
+                <td><label for="txtAccountNumber">Account Number :</label></td>
+                <td><form:input path="accountNumber" id="txtAccountNumber" /></td> 
+            </tr>
+            <tr>
+                <td><label for="txtBankIFSCCode">Bank IFSC Code :</label></td>
+                <td><form:input path="bankIFSCCode" id="txtBankIFSCCode" /></td> 
             </tr>
             <tr>
                 <td colspan="2">
-                    <input type="submit" value="Update" class="form-submit" />
+                    <input type="submit" value="Submit" class="form-submit" />
                     <input type="reset" value="Reset" class="form-reset"/>
                 </td>
             </tr>
-            </table>   
+            </table>
         </form:form>
-		<a href="list">List all Banks</a>
-		&nbsp;|&nbsp;
-		<a href="create">Add New Bank</a>
-		&nbsp;|&nbsp;
-        <a href="delete?id=${dbBank.id}">Delete this Bank</a>
+        <a href="list">List all Service Providers</a>
     </td>
     </tr>
     <tr>
@@ -94,13 +109,29 @@
             expression: "if (VAL.match(/^[A-Za-z\s]{3,100}$/)) return true; else return false;",
             message: "Only Alphabets allowed with minimum 3 characters"
         });
-        jQuery("#txtUrl").validate({
-        	expression: "if (VAL.length > 5 && VAL) return true; else return false;",
+        jQuery("#txtPassword").validate({
+            expression: "if (VAL.length > 5 && VAL) return true; else return false;",
+            message: "Please enter a valid Password with minimum 6 characters"
+        });
+        jQuery("#txtConfirmPassword").validate({
+            expression: "if ((VAL == jQuery('#txtPassword').val()) && VAL) return true; else return false;",
+            message: "Confirm password field doesn't match the password field"
+        });
+        jQuery("#txtRequestUrl").validate({
+            expression: "if (VAL.length > 5 && VAL) return true; else return false;",
             message: "Please provide a valid url"
         });
-
-        jQuery('#bankForm').validated(function(){
-            $('#bankForm').submit();
+        jQuery("#txtResponseUrl").validate({
+            expression: "if (VAL.length > 5 && VAL) return true; else return false;",
+            message: "Please provide a valid url"
+        });
+        jQuery("#txtAccountNumber").validate({
+            expression: "if (VAL.match(/^[A-Za-z0-9]{4,20}$/)) return true; else return false;",
+            message: "Please provide a valid account number"
+        });
+        jQuery("#txtBankIFSCCode").validate({
+            expression: "if (VAL.match(/^[A-Za-z0-9]{4,20}$/)) return true; else return false;",
+            message: "Please provide a valid bank IFSC Code"
         });
     });
     /* ]]> */

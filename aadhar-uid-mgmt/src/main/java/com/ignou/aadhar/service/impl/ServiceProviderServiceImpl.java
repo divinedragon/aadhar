@@ -53,12 +53,14 @@ public class ServiceProviderServiceImpl implements ServiceProviderService {
     }
 
     @Transactional
-    public ServiceProvider add(ServiceProvider serviceProvider) throws RuntimeException {
+    public ServiceProvider add(ServiceProvider serviceProvider)
+                                                throws RuntimeException {
         return serviceProviderDao.add(serviceProvider);
     }
 
     @Transactional
-    public ServiceProvider modify(ServiceProvider serviceProvider) throws RuntimeException {
+    public ServiceProvider modify(ServiceProvider serviceProvider)
+                                                throws RuntimeException {
         return serviceProviderDao.modify(serviceProvider);
     }
 

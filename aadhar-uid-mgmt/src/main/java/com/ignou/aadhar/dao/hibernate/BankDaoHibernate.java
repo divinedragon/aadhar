@@ -31,7 +31,6 @@ import org.hibernate.criterion.Restrictions;
 
 import com.ignou.aadhar.dao.BankDao;
 import com.ignou.aadhar.domain.Bank;
-import com.ignou.aadhar.domain.Bank;
 
 /**
  * Concrete DAO class for hibernate for performing operations on bank table.

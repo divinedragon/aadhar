@@ -29,7 +29,8 @@ import com.ignou.aadhar.domain.ServiceProvider;
  * @author Deepak Shakya
  *
  */
-public interface ServiceProviderDao extends GenericDao<ServiceProvider, Integer> {
+public interface ServiceProviderDao
+                            extends GenericDao<ServiceProvider, Integer> {
 
     /**
      * Gets the records from the Database based on the parameters provided.

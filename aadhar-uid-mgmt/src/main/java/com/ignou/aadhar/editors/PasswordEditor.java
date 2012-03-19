@@ -16,15 +16,33 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.ignou.aadhar.dao;
+package com.ignou.aadhar.editors;
 
-import com.ignou.aadhar.domain.Address;
+import java.beans.PropertyEditorSupport;
 
 /**
- * Data Access Object providing methods to perform operation on table - Address.
+ * Editor class for Password fields to allow Spring to generate MD5 passwords
+ * for the password values.
  * @author Deepak Shakya
  *
  */
-public interface AddressDao extends GenericDao<Address, Integer> {
+public class PasswordEditor extends PropertyEditorSupport {
 
+    /**
+     * Sets the state object value based on the id selected on the form.
+     * @param text id value for which the corresponding state has to be set.
+     */
+    @Override
+    public void setAsText(String text) {
+        return;
+    }
+
+    /**
+     * Returns the state id of the state which is selected by the user.
+     * @return Id value of the State
+     */
+    @Override
+    public String getAsText() {
+        return null;
+    }
 }

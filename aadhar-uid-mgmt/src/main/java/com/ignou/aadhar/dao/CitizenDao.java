@@ -23,7 +23,7 @@ import java.util.Map;
 import com.ignou.aadhar.domain.Citizen;
 
 /**
- * Data Access Object providing methods to perform operations on table - Citizen
+ * Data Access Object providing methods to perform operation on table - Citizen.
  * @author Deepak Shakya
  *
  */

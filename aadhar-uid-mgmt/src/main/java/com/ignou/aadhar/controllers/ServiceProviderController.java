@@ -59,7 +59,7 @@ public class ServiceProviderController {
         /* Lets create an empty Service Provider object to store the details */
         ServiceProvider newServiceProvider = new ServiceProvider();
 
-        /* Add the empty serviceprovider in the model so that they are
+        /* Add the empty Service Provider in the model so that it is
          * available on the form.
          */
         model.addAttribute("newServiceProvider", newServiceProvider);
@@ -241,8 +241,8 @@ public class ServiceProviderController {
 
         JsonWrapper jsonData;
 
-        String[] validParams = {"page","rp","sortname","sortorder","name",
-                "requestUrl","responseUrl","accountNumber","bankIFSCCode"};
+        String[] validParams = {"page", "rp", "sortname", "sortorder", "name",
+                "requestUrl", "responseUrl", "accountNumber", "bankIFSCCode"};
 
         try {
             Map<String, String> paramMap = JsonRequestValidator

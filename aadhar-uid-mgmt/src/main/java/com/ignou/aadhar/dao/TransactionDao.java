@@ -21,7 +21,7 @@ package com.ignou.aadhar.dao;
 import com.ignou.aadhar.domain.Transaction;
 
 /**
- * Data Access Object providing methods to perform operations on table - 
+ * Data Access Object providing methods to perform operations on table -
  * Transaction.
  * @author Deepak Shakya
  *

@@ -36,7 +36,8 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "certificates")
-public class Certificate extends AbstractTimestampEntity implements Serializable {
+public class Certificate
+                    extends AbstractTimestampEntity implements Serializable {
 
     /**
      * Auto-generated serialization id.
