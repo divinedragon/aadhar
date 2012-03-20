@@ -164,7 +164,7 @@ public class StateController {
         }
 
         /* Re-direct the user to the form */
-        return "redirect:/state/create";
+        return "redirect:/state/list";
     }
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)

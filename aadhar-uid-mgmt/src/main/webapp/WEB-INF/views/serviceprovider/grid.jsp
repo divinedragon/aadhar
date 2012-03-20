@@ -148,7 +148,7 @@
         useRp: true,
         rp: 50,
         showTableToggleBtn: true,
-        width: 100%,
+        width: '100%',
         height: 300,
         preProcess : function (json) {
             
@@ -163,7 +163,7 @@
                     if (k == "requestUrl" && v == "") {
                         cell.push("NA");
                     } else {
-                    	cell[k] = v;
+                        cell[k] = v;
                         cell.push(this);
                     }
                 });
@@ -186,7 +186,7 @@
         /* Check which button did the user press */
         if (command == "Add") {
             /* Add button pressed. Re-direct the user to Add screen */
-            alert("Add functionality not yet implemented");
+            window.location.href = "create";
 
         } else {
             /* For update, delete and view, the user needs to select a row
@@ -199,18 +199,27 @@
                 return ;
             }
 
+            /* Get the selected record's id value */
+            var id = $('.trSelected td:first-child div', grid).text();
+
             /* There is a selected row. Check what kind of operation did the
              * user requested.
              */
              if (command == "Delete") {
-                 /* User requested delete operation. */
-                 alert("Delete functionality not yet implemented");
+                 /* User requested delete operation. Ask for confirmation */
+                 var spName = $('.trSelected td:nth-child(2) div', grid).text();
+                 var confirmMsg = "Delete this Record?\n";
+                 confirmMsg += "ID   : " + id + "\n";
+                 confirmMsg += "Name : " + spName
+                 if (confirm(confirmMsg)) {
+                     window.location.href = "delete?id=" + id;
+                 }
              } else if (command == "Edit") {
                  /* User requested edit operation */
-                 alert("Update functionality not yet implemented");
+                 window.location.href = "edit?id=" + id;
              } else if (command == "View") {
                  /* User requested view operation */
-                 alert("View functionality not yet implemented");
+                 window.location.href = "" + id;
              }
         }
     }

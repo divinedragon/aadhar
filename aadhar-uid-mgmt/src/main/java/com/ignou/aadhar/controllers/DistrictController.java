@@ -178,7 +178,7 @@ public class DistrictController {
         }
 
         /* Re-direct the user to the form */
-        return "redirect:/district/create";
+        return "redirect:/district/list";
     }
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)

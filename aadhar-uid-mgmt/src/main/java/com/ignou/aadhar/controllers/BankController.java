@@ -164,7 +164,7 @@ public class BankController {
         }
 
         /* Re-direct the user to the form */
-        return "redirect:/bank/create";
+        return "redirect:/bank/list";
     }
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)

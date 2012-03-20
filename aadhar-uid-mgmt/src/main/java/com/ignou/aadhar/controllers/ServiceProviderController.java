@@ -175,7 +175,7 @@ public class ServiceProviderController {
         }
 
         /* Re-direct the user to the form */
-        return "redirect:/serviceprovider/grid";
+        return "redirect:/serviceprovider/list";
     }
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)

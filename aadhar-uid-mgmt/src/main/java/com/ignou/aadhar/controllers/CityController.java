@@ -198,7 +198,7 @@ public class CityController {
         }
 
         /* Re-direct the user to the form */
-        return "redirect:/city/create";
+        return "redirect:/city/list";
     }
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
