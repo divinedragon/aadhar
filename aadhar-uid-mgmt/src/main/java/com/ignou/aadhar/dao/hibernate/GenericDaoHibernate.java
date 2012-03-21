@@ -24,10 +24,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.hibernate.Hibernate;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.type.NullableType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import org.springframework.stereotype.Repository;
@@ -142,7 +144,8 @@ public class GenericDaoHibernate<MODEL, PRIMARYKEY extends Serializable>
 
         /* Get the Hibernate Session instance to perform db operation */
         Session session = getSessionFactory().getCurrentSession();
-        SQLQuery sqlQuery = session.createSQLQuery(strSqlQuery);
+        SQLQuery sqlQuery = session.createSQLQuery(strSqlQuery)
+                                       .addScalar("EnumData", Hibernate.STRING);
 
         /* Execute the query and fetch the enum data as string */
         String enumData = (String) sqlQuery.uniqueResult();

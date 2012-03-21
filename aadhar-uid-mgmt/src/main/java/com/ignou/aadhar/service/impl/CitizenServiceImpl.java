@@ -19,6 +19,7 @@
 package com.ignou.aadhar.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -74,5 +75,39 @@ public class CitizenServiceImpl implements CitizenService {
     @Transactional
     public void delete(Integer id) throws RuntimeException {
         citizenDao.delete(id);
+    }
+
+    /**
+     * Gets the records from the Database based on the parameters provided.
+     * @param searchField The field name on which the search is to be made.
+     * @param searchValue Value which needs to be searched.
+     * @param pageNumber Initial offset of the records.
+     * @param recordsPerPage Total number of records which are selected for
+     * resultset.
+     * @param sortField Name of the field on which the data needs to be sorted.
+     * @param sortOrder Order in which the sortField is sorted.
+     * @return Returns the records as list of map where each map stores the
+     * record data as key-value pairs.
+     */
+    @Override
+    @Transactional
+    public List<Map<String, Object>> getCitizens(String searchField,
+            String searchValue, Integer pageNumber, Integer recordsPerPage,
+            String sortField, String sortOrder) {
+
+        return citizenDao.getCitizens(searchField, searchValue, pageNumber,
+                                        recordsPerPage, sortField, sortOrder);
+    }
+
+    /**
+     * All valid Gender values which can be selected by citizens.
+     * @return Map containing the Gender values. The keys are the actual values
+     * which can be used for the Gender field in the database. The values
+     * are Title Case version of the keys.
+     */
+    @Override
+    @Transactional
+    public Map<String, String> getGenders() {
+        return citizenDao.getGenders();
     }
 }

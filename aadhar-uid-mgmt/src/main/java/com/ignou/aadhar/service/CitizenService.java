@@ -18,6 +18,9 @@
  */
 package com.ignou.aadhar.service;
 
+import java.util.List;
+import java.util.Map;
+
 import com.ignou.aadhar.domain.Citizen;
 
 /**
@@ -26,4 +29,28 @@ import com.ignou.aadhar.domain.Citizen;
  *
  */
 public interface CitizenService extends GenericService<Citizen> {
+
+    /**
+     * All valid Gender values which can be selected by citizens.
+     * @return Map containing the Gender values. The keys are the actual values
+     * which can be used for the Gender field in the database. The values
+     * are Title Case version of the keys.
+     */
+    public Map<String, String> getGenders();
+
+    /**
+     * Gets the records from the Database based on the parameters provided.
+     * @param searchField The field name on which the search is to be made.
+     * @param searchValue Value which needs to be searched.
+     * @param pageNumber Initial offset of the records.
+     * @param recordsPerPage Total number of records which are selected for
+     * resultset.
+     * @param sortField Name of the field on which the data needs to be sorted.
+     * @param sortOrder Order in which the sortField is sorted.
+     * @return Returns the records as list of map where each map stores the
+     * record data as key-value pairs.
+     */
+    public List<Map<String, Object>> getCitizens(String searchField,
+            String searchValue, Integer pageNumber, Integer recordsPerPage,
+            String sortField, String sortOrder);
 }
