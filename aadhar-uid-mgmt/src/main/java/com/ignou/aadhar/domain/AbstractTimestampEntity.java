@@ -40,7 +40,7 @@ public class AbstractTimestampEntity {
      * Creation Date of the object in the database.
      */
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "CreationDate", nullable = false)
+    @Column(name = "CreatedDate", nullable = false)
     private Date created;
 
     /**

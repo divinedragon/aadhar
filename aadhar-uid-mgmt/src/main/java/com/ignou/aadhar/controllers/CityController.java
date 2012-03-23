@@ -18,7 +18,11 @@
  */
 package com.ignou.aadhar.controllers;
 
+import java.net.Authenticator.RequestorType;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -323,6 +327,42 @@ public class CityController {
         } catch (Exception e) {
             jsonData = new JsonWrapper("Failure", e.getMessage());
             e.printStackTrace();
+        }
+
+        return jsonData;
+    }
+
+    @RequestMapping(value = "/listForState/{stateId}", method = RequestMethod.GET)
+    @ResponseBody
+    public JsonWrapper getCitiesForStateId(@PathVariable Integer stateId) {
+
+        JsonWrapper jsonData;
+
+        /* Lets fetch the records from the database for the search condition
+         * provided in the request.
+         */
+        List<City> cities = cityService.getCitiesForStateId(stateId);
+
+        List<Map<String, Object>> data = new LinkedList<Map<String,Object>>();
+
+        /* Check if any records were fetched successfully */
+        if (cities != null && !cities.isEmpty()) {
+
+            /* Iterate all city records & save the city data for JSON format */
+            for (City city : cities) {
+                Map<String, Object> cityData = new HashMap<String, Object>();
+                cityData.put("id", city.getId().toString());
+                cityData.put("name", city.getCity());
+                data.add(cityData);
+            }
+            
+            /* Convert the city data as Json Wrapper instance */
+            jsonData = new JsonWrapper(data, "Success");
+        } else {
+
+            /* Because no records were fetched, we will return empty list */
+            jsonData = new JsonWrapper(new ArrayList(), "Failure",
+                                "No records found for search parameters");
         }
 
         return jsonData;

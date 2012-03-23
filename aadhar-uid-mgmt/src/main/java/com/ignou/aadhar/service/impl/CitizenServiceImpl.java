@@ -110,4 +110,16 @@ public class CitizenServiceImpl implements CitizenService {
     public Map<String, String> getGenders() {
         return citizenDao.getGenders();
     }
+
+    /**
+     * All valid Access Roles which can be selected by citizens.
+     * @return Map containing the Access Role values. The keys are the actual
+     * values which can be used for the Access Role field in the database.
+     * The values are Title Case version of the keys.
+     */
+    @Override
+    @Transactional
+    public Map<String, String> getAccessRoles() {
+        return citizenDao.getAccessRoles();
+    }
 }

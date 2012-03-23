@@ -39,6 +39,14 @@ public interface CitizenService extends GenericService<Citizen> {
     public Map<String, String> getGenders();
 
     /**
+     * All valid Access Roles which can be selected by citizens.
+     * @return Map containing the Access Role values. The keys are the actual
+     * values which can be used for the Access Role field in the database.
+     * The values are Title Case version of the keys.
+     */
+    public Map<String, String> getAccessRoles();
+
+    /**
      * Gets the records from the Database based on the parameters provided.
      * @param searchField The field name on which the search is to be made.
      * @param searchValue Value which needs to be searched.

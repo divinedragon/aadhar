@@ -46,4 +46,11 @@ public interface DistrictDao extends GenericDao<District, Integer> {
             String searchValue, Integer pageNumber, Integer recordsPerPage,
             String sortField, String sortOrder);
 
+    /**
+     * Gets the Districts which are linked to the stateId provided.
+     * @param stateId State id for which all the districts will be returned.
+     * @return All district objects for the stateId as a list.
+     */
+    public List<District> getDistrictsForStateId(Integer stateId);
+
 }

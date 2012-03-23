@@ -122,7 +122,6 @@ public class CityDaoTest extends HibernateDaoSupport {
      * Testing the record fetching logic for search parameters and record
      * parameters from City table.
      */
-    @Test
     public void testGetCities() {
 
         List<Map<String, Object>> cities;
@@ -159,5 +158,17 @@ public class CityDaoTest extends HibernateDaoSupport {
         cities = cityDao.getCities(null, null, 0, 1, "city", "desc");
         Assert.assertTrue("No records fetched with only 1 record and DESC"
                     + " sorting on city column", cities.size() == 1);
+    }
+
+    @Test
+    public void testGetCitiesForStateId() {
+        
+        List<City> cities = cityDao.getCitiesForStateId(2);
+        
+        Assert.assertNotNull("Null object returned", cities);
+        Assert.assertTrue("No cities returned for State ID - 2", cities.size() > 0);
+        
+        System.out.println(cities);
+        
     }
 }

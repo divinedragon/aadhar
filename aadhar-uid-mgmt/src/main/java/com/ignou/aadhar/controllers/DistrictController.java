@@ -19,6 +19,8 @@
 package com.ignou.aadhar.controllers;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -304,6 +306,42 @@ public class DistrictController {
         } catch (Exception e) {
             jsonData = new JsonWrapper("Failure", e.getMessage());
             e.printStackTrace();
+        }
+
+        return jsonData;
+    }
+
+    @RequestMapping(value = "/listForState/{stateId}", method = RequestMethod.GET)
+    @ResponseBody
+    public JsonWrapper getDistrictsForStateId(@PathVariable Integer stateId) {
+
+        JsonWrapper jsonData;
+
+        /* Lets fetch the records from the database for the search condition
+         * provided in the request.
+         */
+        List<District> districts = districtService.getDistrictsForStateId(stateId);
+
+        List<Map<String, Object>> data = new LinkedList<Map<String,Object>>();
+
+        /* Check if any records were fetched successfully */
+        if (districts != null && !districts.isEmpty()) {
+
+            /* Iterate all district records & save data for JSON format */
+            for (District district : districts) {
+                Map<String, Object> districtData = new HashMap<String, Object>();
+                districtData.put("id", district.getId().toString());
+                districtData.put("name", district.getDistrict());
+                data.add(districtData);
+            }
+            
+            /* Convert the district data as Json Wrapper instance */
+            jsonData = new JsonWrapper(data, "Success");
+        } else {
+
+            /* Because no records were fetched, we will return empty list */
+            jsonData = new JsonWrapper(new ArrayList(), "Failure",
+                                "No records found for search parameters");
         }
 
         return jsonData;

@@ -18,16 +18,23 @@
  */
 package com.ignou.aadhar.controllers;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -35,8 +42,29 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ignou.aadhar.constants.Constants;
+import com.ignou.aadhar.constants.UIDStates;
+import com.ignou.aadhar.constants.UIDTypes;
+import com.ignou.aadhar.domain.Address;
+import com.ignou.aadhar.domain.Bank;
 import com.ignou.aadhar.domain.Citizen;
+import com.ignou.aadhar.domain.City;
+import com.ignou.aadhar.domain.District;
+import com.ignou.aadhar.domain.State;
+import com.ignou.aadhar.editors.BankEditor;
+import com.ignou.aadhar.editors.CityEditor;
+import com.ignou.aadhar.editors.DistrictEditor;
+import com.ignou.aadhar.editors.StateEditor;
+import com.ignou.aadhar.service.AddressService;
+import com.ignou.aadhar.service.BankService;
 import com.ignou.aadhar.service.CitizenService;
+import com.ignou.aadhar.service.CityService;
+import com.ignou.aadhar.service.DistrictService;
+import com.ignou.aadhar.service.StateService;
+import com.ignou.aadhar.service.impl.BankServiceImpl;
+import com.ignou.aadhar.service.impl.CityServiceImpl;
+import com.ignou.aadhar.service.impl.DistrictServiceImpl;
+import com.ignou.aadhar.service.impl.StateServiceImpl;
+import com.ignou.aadhar.util.UIDGenerator;
 import com.ignou.aadhar.util.json.JsonRequestValidator;
 import com.ignou.aadhar.util.json.JsonWrapper;
 
@@ -52,6 +80,51 @@ public class CitizenController {
     @Autowired
     private CitizenService citizenService;
 
+    @Autowired
+    private BankService bankService;
+
+    @Autowired
+    private StateService stateService;
+
+    @Autowired
+    private DistrictService districtService;
+
+    @Autowired
+    private CityService cityService;
+
+    @Autowired
+    private AddressService addressService;
+
+    @InitBinder
+    public void initBinder(WebDataBinder dataBinder) {
+
+        /* Let's bind the conversion mechanism for Banks so that they are
+         * mapped correctly in the bank attribute.
+         */
+        dataBinder.registerCustomEditor(Bank.class,
+              new BankEditor(((BankServiceImpl) bankService).getBankDao()));
+
+        /* Also, we need to convert the dateOfBirth in string format to Date
+         * object.
+         */
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        CustomDateEditor editor = new CustomDateEditor(dateFormat, true);
+        dataBinder.registerCustomEditor(Date.class, editor);
+
+        /* Add the State converter for mapping state objects */
+        dataBinder.registerCustomEditor(State.class,
+              new StateEditor(((StateServiceImpl) stateService).getStateDao()));
+
+        /* Add the District converter for mapping district objects */
+        dataBinder.registerCustomEditor(District.class,
+              new DistrictEditor(((DistrictServiceImpl) districtService)
+                                                            .getDistrictDao()));
+
+        /* Add the City converter for mapping city objects */
+        dataBinder.registerCustomEditor(City.class,
+              new CityEditor(((CityServiceImpl) cityService).getCityDao()));
+    }
+
     @RequestMapping(value = "/create", method = RequestMethod.GET)
     public String createForm(Model model) {
 
@@ -63,6 +136,9 @@ public class CitizenController {
          */
         model.addAttribute("newCitizen", newCitizen);
         model.addAttribute("genders", citizenService.getGenders());
+        model.addAttribute("banks", bankService.list());
+        model.addAttribute("accessRoles", citizenService.getAccessRoles());
+        model.addAttribute("states", stateService.list());
 
         /* Re-direct the user to the form */
         return "citizen/create";
@@ -70,7 +146,7 @@ public class CitizenController {
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public String createCitizen(@Valid Citizen newCitizen,
-                                        BindingResult result) throws Exception {
+                           BindingResult result, Model model) throws Exception {
 
         /* Check if there was any error while binding the citizen object */
         if (result.hasErrors()) {
@@ -78,13 +154,32 @@ public class CitizenController {
             /* There was some error while binding the form data to java objects.
              * Lets re-direct the user back to the form.
              */
+            for(FieldError error :result.getFieldErrors()) {
+                System.out.println("--> " + error.getField() + " - " + error.getDefaultMessage());
+            }
+
+            model.addAttribute("newCitizen", newCitizen);
+            model.addAttribute("genders", citizenService.getGenders());
+            model.addAttribute("banks", bankService.list());
+            model.addAttribute("accessRoles", citizenService.getAccessRoles());
+            model.addAttribute("states", stateService.list());
 
             return "citizen/create";
         }
 
+        /* Let's generate the UID for this citizen */
+        newCitizen.setUid(UIDGenerator.generateUID(UIDTypes.CITIZEN));
+
+        /* Also, set the created date for now's date */
+        newCitizen.setCreated(new Date());
+
+        /* During registration, the status would be pending */
+        newCitizen.setStatus(UIDStates.PENDING.getCode());
+
         /* No error while binding the form data to java objects */
         /* Lets save the new Citizen into the database */
-        Citizen dbCitizen = citizenService.add(newCitizen);
+        //Citizen dbCitizen = citizenService.add(newCitizen);
+        Citizen dbCitizen = createCitizenDetails(newCitizen);
 
         /* Citizen added successfully. Lets re-direct to view page */
         return "redirect:/citizen/" + dbCitizen.getId();
@@ -127,6 +222,8 @@ public class CitizenController {
 
         /* Save the database citizen object to the model */
         model.addAttribute("editCitizen", citizen);
+        model.addAttribute("genders", citizenService.getGenders());
+        model.addAttribute("accessRoles", citizenService.getAccessRoles());
 
         /* Re-direct the user to the form */
         return "citizen/edit";
@@ -307,5 +404,44 @@ public class CitizenController {
         }
 
         return jsonData;
+    }
+
+    private Citizen createCitizenDetails(Citizen citizen) {
+        /* Lets check if both Local Address and Permanent Address values are
+         * same. Then will have to create just one record and the reference
+         * would be set for both Local and Permanent addresses.
+         */
+        Address dbLocalAddress = null;
+        Address dbPermanentAddress = null;
+        if (isAddressSame(citizen.getLocalAddress(),
+                citizen.getPermanentAddress())) {
+            /* Both Address are Same. Lets create one of them and reference
+             * local and permanent address of citizen object to the same
+             * address instance.
+             */
+            Address dbAddress = addressService.add(citizen.getLocalAddress());
+            dbPermanentAddress = dbLocalAddress = dbAddress;
+
+        } else {
+            /* Local and Permanent Address are different. Insert each of those
+             * set the individual references.
+             */
+            dbLocalAddress = addressService.add(citizen.getLocalAddress());
+            dbPermanentAddress = addressService.add(citizen.getPermanentAddress());
+        }
+
+        citizen.setLocalAddress(dbLocalAddress);
+        citizen.setPermanentAddress(dbPermanentAddress);
+        return null;
+    }
+
+    private boolean isAddressSame(Address local, Address permanent) {
+        
+        return (local.getCareOf().equals(permanent.getCareOf())
+                && local.getAddressLine1().equals(permanent.getAddressLine1())
+                && local.getAddressLine2().equals(permanent.getAddressLine2())
+                && local.getAddressLine3().equals(permanent.getAddressLine3())
+                && local.getArea().equals(permanent.getArea()));
+        
     }
 }

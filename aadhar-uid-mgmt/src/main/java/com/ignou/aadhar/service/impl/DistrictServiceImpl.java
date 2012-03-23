@@ -43,6 +43,13 @@ public class DistrictServiceImpl implements DistrictService {
     @Autowired
     private DistrictDao districtDao;
 
+    public DistrictDao getDistrictDao() {
+        return districtDao;
+    }
+
+    public void setDistrictDao(DistrictDao districtDao) {
+        this.districtDao = districtDao;
+    }
 
     @Transactional
     public District add(District district) throws RuntimeException {
@@ -88,5 +95,16 @@ public class DistrictServiceImpl implements DistrictService {
             String sortField, String sortOrder) {
         return districtDao.getDistricts(searchField, searchValue, pageNumber,
                 recordsPerPage, sortField, sortOrder);
+    }
+
+    /**
+     * Gets the Districts which are linked to the stateId provided.
+     * @param stateId State id for which all the districts will be returned.
+     * @return All district objects for the stateId as a list.
+     */
+    @Override
+    @Transactional
+    public List<District> getDistrictsForStateId(Integer stateId) {
+        return districtDao.getDistrictsForStateId(stateId);
     }
 }

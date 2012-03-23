@@ -46,4 +46,11 @@ public interface CityDao extends GenericDao<City, Integer> {
             String searchValue, Integer pageNumber, Integer recordsPerPage,
             String sortField, String sortOrder);
 
+    /**
+     * Gets the Cities which are linked to the stateId provided.
+     * @param stateId State id for which all the cities will be returned.
+     * @return All city objects for the stateId as a list.
+     */
+    public List<City> getCitiesForStateId(Integer stateId);
+
 }

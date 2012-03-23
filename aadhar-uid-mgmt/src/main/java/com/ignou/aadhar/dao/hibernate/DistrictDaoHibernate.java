@@ -141,4 +141,17 @@ public class DistrictDaoHibernate extends GenericDaoHibernate<District, Integer>
 
         return returnDistricts;
     }
+
+    /**
+     * Gets the Districts which are linked to the stateId provided.
+     * @param stateId State id for which all the districts will be returned.
+     * @return All district objects for the stateId as a list.
+     */
+    @Override
+    public List<District> getDistrictsForStateId(Integer stateId) {
+        return getSessionFactory().getCurrentSession()
+                .createCriteria(District.class)
+                    .add(Restrictions.eq("state.id", stateId))
+                        .addOrder(Order.asc("district")).list();
+    }
 }

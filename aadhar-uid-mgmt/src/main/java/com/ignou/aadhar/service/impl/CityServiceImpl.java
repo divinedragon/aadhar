@@ -97,4 +97,15 @@ public class CityServiceImpl implements CityService {
         return cityDao.getCities(searchField, searchValue, pageNumber,
                                      recordsPerPage, sortField, sortOrder);
     }
+
+    /**
+     * Gets the Cities which are linked to the stateId provided.
+     * @param stateId State id for which all the cities will be returned.
+     * @return All city objects for the stateId as a list.
+     */
+    @Override
+    @Transactional
+    public List<City> getCitiesForStateId(Integer stateId) {
+        return cityDao.getCitiesForStateId(stateId);
+    }
 }

@@ -29,6 +29,7 @@ import org.hibernate.criterion.CriteriaSpecification;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ignou.aadhar.dao.CityDao;
 import com.ignou.aadhar.domain.City;
@@ -212,5 +213,20 @@ public class CityDaoHibernate extends GenericDaoHibernate<City, Integer>
         }
 
         return returnCities;
+    }
+
+    /**
+     * Gets the Cities which are linked to the stateId provided.
+     * @param stateId State id for which all the cities will be returned.
+     * @return All city objects for the stateId as a list.
+     */
+    @Override
+    @Transactional
+    public List<City> getCitiesForStateId(Integer stateId) {
+        
+        return getSessionFactory().getCurrentSession()
+                .createCriteria(City.class)
+                    .add(Restrictions.eq("state.id", stateId))
+                        .addOrder(Order.asc("city")).list();
     }
 }

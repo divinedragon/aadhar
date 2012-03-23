@@ -40,6 +40,18 @@ public class CitizenDaoHibernate extends GenericDaoHibernate<Citizen, Integer>
     }
 
     /**
+     * Overriding the default implementation of Hibernate merge() method, as
+     * the other objects might not be created. So we need to create them as well
+     * for creating the Citizen object successfully.
+     */
+    @Override
+    public Citizen add(final Citizen model) {
+        
+        
+        return null;
+    } 
+    
+    /**
      * All valid Statuses for a Citizen.
      * @return Map containing the Statuses. The keys are the actual values which
      * can be used for the Status field in the database. The values are Title

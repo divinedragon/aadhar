@@ -12,7 +12,7 @@
 <style type="text/css">
     table td { padding: 5px;}
     label { color:black; font-weight:bold; font-size:14px;  }
-    span.ValidationErrors { display: inline-block; width:400px; }
+    span.ValidationErrors { display: inline-block; }
 </style>
 <!-- IE6 "fix" for the close png image -->
 <!--[if lt IE 7]>
@@ -66,6 +66,9 @@ var updateSelects = function (selectedDate)
     $('#d option[value=' + selectedDate.getDate() + ']').attr('selected', 'selected');
     $('#m option[value=' + (selectedDate.getMonth()+1) + ']').attr('selected', 'selected');
     $('#y option[value=' + (selectedDate.getFullYear()) + ']').attr('selected', 'selected');
+
+    var strDate = selectedDate.getDate() + "-" + (selectedDate.getMonth()+1) + "-" + selectedDate.getFullYear();
+    $("#txtDateOfBirth").val(strDate);
 }
 // listen for when the selects are changed and update the picker
 $('#d, #m, #y')
@@ -79,17 +82,69 @@ $('#d, #m, #y')
                         $('#d').val()
                     );
             $('#date-pick').dpSetSelected(d.asString());
+
+            var strDate = $('#d').val() + "-" + $('#m').val() + "-" + $('#y').val();
+            $("#txtDateOfBirth").val(strDate);
         }
     );
-
 // default the position of the selects to today
 var today = new Date();
+
+$("#y").html("");
+/* Create the Years from 1900 to current year */
+for (var i=1900; i <= today.getFullYear(); i++) {
+    $("#y").append('<option value="' + i + '" ' + ((i == today.getFullYear()) ? 'selected="selected"':'') +'>' + i + '</option>');
+}
 updateSelects(today.getTime());
 
 // and update the datePicker to reflect it...
 $('#d').trigger('change');
 
 });
+
+$(function(){
+    $('#cmbLocalState, #cmbPermanentState').bind('change', function() {
+
+        stateId = $(this).val();
+
+        cmbType = $(this).attr("id").replace("cmb", "").replace("State", "");
+
+        cityCmbName = "#cmb" + cmbType + "City";
+        districtCmbName = "#cmb" + cmbType + "District";
+
+        $.ajax({
+            type: "GET",
+            url: "../city/listForState/" + stateId,
+            dataType: "json",
+            success: function (data) {
+                        data = eval(data);
+                        $(cityCmbName).html("");
+                        $.each(data.object, function(i, city){
+                            $(cityCmbName).append('<option value="' + city.id + '">' + city.name + '</option>');
+                        });
+            },
+        });
+
+        $.ajax({
+            type: "GET",
+            url: "../district/listForState/" + stateId,
+            dataType: "json",
+            success: function (data) {
+                        data = eval(data);
+                        $(districtCmbName).html("");
+                        $.each(data.object, function(i, district){
+                            $(districtCmbName).append('<option value="' + district.id + '">' + district.name + '</option>');
+                        });
+            },
+        });
+    });
+    $('#cmbLocalDistrict').html("<option value='0'>Select District</option>");
+    $('#cmbPermanentDistrict').html("<option value='0'>Select District</option>");
+    $('#cmbLocalCity').html("<option value='0'>Select City</option>");
+    $('#cmbPermanentCity').html("<option value='0'>Select City</option>");
+});
+
+
 </script>
 
 
@@ -113,9 +168,9 @@ $('#d').trigger('change');
     <tr valign="top">
     <td>
         <form:form id="citizenForm" method="post" action="create" modelAttribute="newCitizen">
-            <table>
+            <table style="width:100%;">
             <tr>
-                <td><label for="txtName">Name :</label></td>
+                <td style="width:25%;"><label for="txtName">Name :</label></td>
                 <td><form:input path="name" id="txtName" maxlength="200" /></td> 
             </tr>
             <tr>
@@ -129,11 +184,13 @@ $('#d').trigger('change');
             <tr>
                 <td><label>Gender :</label></td>
                 <td>
+                    <span id="gender">
                     <c:forEach items="${genders}" var="gender" varStatus="loop">
-                        <form:radiobutton path="gender" id="${gender.value}" value="${gender.key}" />
-                        <label for="${gender.value}">${gender.value}</label>
+                        <form:radiobutton path="gender" id="gender_${gender.value}" value="${gender.key}" />
+                        <label for="gender_${gender.value}">${gender.value}</label>
                         &nbsp;&nbsp;
                     </c:forEach>
+                    </span>
                 </td> 
             </tr>
             <tr>
@@ -199,7 +256,120 @@ $('#d').trigger('change');
                         <option value="2010">2010</option>
                     </select>
                     <a href="#" id="date-pick"><img src="../images/forms/icon_calendar.jpg" alt="" style="vertical-align:bottom;margin-top:-5px" /></a>
+                    <form:hidden path="dateOfBirth" id="txtDateOfBirth" />
                 </td> 
+            </tr>
+            <tr>
+                <td><label for="txtEmail">Email :</label></td>
+                <td><form:input path="email" id="txtEmail" /></td> 
+            </tr>
+            <tr>
+                <td><label for="txtMobile">Mobile :</label></td>
+                <td><form:input path="mobile" id="txtMobile" /></td> 
+            </tr>
+            <tr>
+                <td><label for="cmbBank">Bank :</label></td>
+                <td><form:select path="account.bank" id="cmbState" items="${banks}" itemLabel="name" itemValue="id" /></td> 
+            </tr>
+            <tr>
+                <td><label>Access Role :</label></td>
+                <td>
+                    <span id="accessRoles">
+                    <c:forEach items="${accessRoles}" var="accessRole" varStatus="loop">
+                        <form:radiobutton path="accessRole" id="accessRoles_${accessRole.value}" value="${accessRole.key}" />
+                        <label for="accessRoles_${accessRole.value}">${accessRole.value}</label>
+                        &nbsp;&nbsp;
+                    </c:forEach>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <table style="width:100%;">
+                        <tr>
+                            <td>
+                                <table style="border:1px solid black;width:100%;">
+                                    <caption style="font-size:16px; font-weigh:bold;padding:5px">Local Address:</caption>
+                                    <tr>
+                                        <td><label for="txtLocalCO">C/O</label></td>
+                                        <td><form:input path="localAddress.careOf" id="txtLocalCO" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td><label for="txtLocalLine1">Line 1</label></td>
+                                        <td><form:input path="localAddress.addressLine1" id="txtLocalLine1" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td><label for="txtLocalLine2">Line 2</label></td>
+                                        <td><form:input path="localAddress.addressLine2" id="txtLocalLine2" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td><label for="txtLocalLine3">Line 3</label></td>
+                                        <td><form:input path="localAddress.addressLine3" id="txtLocalLine3" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td><label for="txtLocalArea">Area</label></td>
+                                        <td><form:input path="localAddress.area" id="txtLocalArea" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td><label for="cmbLocalState">State</label></td>
+                                        <td><form:select path="localAddress.state" id="cmbLocalState" items="${states}" itemLabel="state" itemValue="id" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td><label for="cmbLocalDistrict">District</label></td>
+                                        <td><form:select path="localAddress.district" id="cmbLocalDistrict" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td><label for="cmbLocalCity">City</label></td>
+                                        <td><form:select path="localAddress.city" id="cmbLocalCity" /></td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td>
+                                <table style="border:1px solid black;width:100%;">
+                                    <caption style="font-size:16px; font-weigh:bold;padding:5px" id="addressCheck">
+                                        Permanent Address:<input type="checkbox" />
+                                    </caption>
+                                    <tr>
+                                        <td><label for="txtPermanentCO">C/O</label></td>
+                                        <td><form:input path="permanentAddress.careOf" id="txtPermanentCO" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td><label for="txtPermanentLine1">Line 1</label></td>
+                                        <td><form:input path="permanentAddress.addressLine1" id="txtPermanentLine1" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td><label for="txtPermanentLine2">Line 2</label></td>
+                                        <td><form:input path="permanentAddress.addressLine2" id="txtPermanentLine2" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td><label for="txtPermanentLine3">Line 3</label></td>
+                                        <td><form:input path="permanentAddress.addressLine3" id="txtPermanentLine3" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td><label for="txtPermanentArea">Area</label></td>
+                                        <td><form:input path="permanentAddress.area" id="txtPermanentArea" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td><label for="cmbPermanentState">State</label></td>
+                                        <td><form:select path="permanentAddress.state" id="cmbPermanentState" items="${states}" itemLabel="state" itemValue="id" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td><label for="cmbPermanentDistrict">District</label></td>
+                                        <td><form:select path="permanentAddress.district" id="cmbPermanentDistrict" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td><label for="cmbPermanentCity">City</label></td>
+                                    <td><form:select path="permanentAddress.city" id="cmbPermanentCity" /></td>
+                                    </tr>
+                                </table>
+                            </td>
+                            
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                </td>
             </tr>
             <tr>
                 <td colspan="2">
@@ -249,21 +419,85 @@ $('#d').trigger('change');
             expression: "if ((VAL == jQuery('#txtPassword').val()) && VAL) return true; else return false;",
             message: "Confirm password field doesn't match the password field"
         });
-        jQuery("#txtRequestUrl").validate({
-            expression: "if (VAL.length > 5 && VAL) return true; else return false;",
-            message: "Please provide a valid url"
+        jQuery("#txtEmail").validate({
+            expression: "if (VAL.match(/^[^\\W][a-zA-Z0-9\\_\\-\\.]+([a-zA-Z0-9\\_\\-\\.]+)*\\@[a-zA-Z0-9_]+(\\.[a-zA-Z0-9_]+)*\\.[a-zA-Z]{2,4}$/)) return true; else return false;",
+            message: "Please enter a valid Email ID"
         });
-        jQuery("#txtResponseUrl").validate({
-            expression: "if (VAL.length > 5 && VAL) return true; else return false;",
-            message: "Please provide a valid url"
+        jQuery("#gender").validate({
+            expression: "if (isChecked(SelfID)) return true; else return false;",
+            message: "Please select your gender"
         });
-        jQuery("#txtAccountNumber").validate({
-            expression: "if (VAL.match(/^[A-Za-z0-9]{4,20}$/)) return true; else return false;",
-            message: "Please provide a valid account number"
+        jQuery("#accessRoles").validate({
+            expression: "if (isChecked(SelfID)) return true; else return false;",
+            message: "Please select the Access Role"
         });
-        jQuery("#txtBankIFSCCode").validate({
-            expression: "if (VAL.match(/^[A-Za-z0-9]{4,20}$/)) return true; else return false;",
-            message: "Please provide a valid bank IFSC Code"
+        jQuery("#txtMobile").validate({
+            expression: "if (VAL.match(/^[0-9]{10}$/)) return true; else return false;",
+            message: "Please provide your 10-digit mobile number"
+        });
+        jQuery("#txtLocalCO").validate({
+            expression: "if (VAL.length > 0){ if (VAL.length > 5) return true; else false; } else return true;",
+            message: "Minimum 5 characters are required"
+        });
+        jQuery("#txtLocalLine1").validate({
+            expression: "if (VAL.length > 5) return true; else false;",
+            message: "Minimum 5 characters are required"
+        });
+        jQuery("#txtLocalLine2").validate({
+            expression: "if (VAL.length > 0){ if (VAL.length > 5) return true; else false; } else return true;",
+            message: "Minimum 5 characters are required"
+        });
+        jQuery("#txtLocalLine3").validate({
+            expression: "if (VAL.length > 0){ if (VAL.length > 5) return true; else false; } else return true;",
+            message: "Minimum 5 characters are required"
+        });
+        jQuery("#txtLocalArea").validate({
+            expression: "if (VAL.length > 5) return true; else false;",
+            message: "Minimum 5 characters are required"
+        });
+        jQuery("#cmbLocalState").validate({
+            expression: "if ((VAL != '0') && (VAL != '')) return true; else return false;",
+            message: "Please select a state"
+        });
+        jQuery("#cmbLocalDistrict").validate({
+            expression: "if ((VAL != '0') && (VAL != '')) return true; else return false;",
+            message: "Please select a district"
+        });
+        jQuery("#cmbLocalCity").validate({
+            expression: "if ((VAL != '0') && (VAL != '')) return true; else return false;",
+            message: "Please select a city"
+        });
+        jQuery("#txtPermanentCO").validate({
+            expression: "if (!isChecked('addressCheck')) { if (VAL.length > 0) { if (VAL.length > 5) return true; else false; } else return true; } else return true;",
+            message: "Minimum 5 characters are required"
+        });
+        jQuery("#txtPermanentLine1").validate({
+            expression: "if (!isChecked('addressCheck')) { if (VAL.length > 5) return true; else false; } else return true;",
+            message: "Minimum 5 characters are required"
+        });
+        jQuery("#txtPermanentLine2").validate({
+            expression: "if (!isChecked('addressCheck')) { if (VAL.length > 0){ if (VAL.length > 5) return true; else false; } else return true; } else return true;",
+            message: "Minimum 5 characters are required"
+        });
+        jQuery("#txtPermanentLine3").validate({
+            expression: "if (!isChecked('addressCheck')) { if (VAL.length > 0){ if (VAL.length > 5) return true; else false; } else return true; } else return true; ",
+            message: "Minimum 5 characters are required"
+        });
+        jQuery("#txtPermanentArea").validate({
+            expression: "if (!isChecked('addressCheck')) { if (VAL.length > 5) return true; else false; } else return true;",
+            message: "Minimum 5 characters are required"
+        });
+        jQuery("#cmbPermanentState").validate({
+            expression: "if (!isChecked('addressCheck')) { if ((VAL != '0') && (VAL != '')) return true; else return false; } else return true;",
+            message: "Please select a state"
+        });
+        jQuery("#cmbPermanentDistrict").validate({
+            expression: "if (!isChecked('addressCheck')) { if ((VAL != '0') && (VAL != '')) return true; else return false;} else return true;",
+            message: "Please select a district"
+        });
+        jQuery("#cmbPermanentCity").validate({
+            expression: "if (!isChecked('addressCheck')) { if ((VAL != '0') && (VAL != '')) return true; else return false;} else return true;",
+            message: "Please select a city"
         });
     });
     /* ]]> */
