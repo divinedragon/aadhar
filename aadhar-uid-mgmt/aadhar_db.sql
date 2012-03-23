@@ -20,14 +20,36 @@
 
 CREATE DATABASE IF NOT EXISTS aadhar;
 USE aadhar;
+
+--
+-- Definition of table `aadhar`.`accounts`
+--
+
+DROP TABLE IF EXISTS `aadhar`.`accounts`;
 CREATE TABLE  `aadhar`.`accounts` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `AccountNumber` varchar(20) NOT NULL,
   `BankId` int(10) DEFAULT NULL,
-  `CreationDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `CreatedDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `BankId` (`BankId`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `aadhar`.`accounts`
+--
+
+/*!40000 ALTER TABLE `accounts` DISABLE KEYS */;
+LOCK TABLES `accounts` WRITE;
+UNLOCK TABLES;
+/*!40000 ALTER TABLE `accounts` ENABLE KEYS */;
+
+
+--
+-- Definition of table `aadhar`.`address`
+--
+
+DROP TABLE IF EXISTS `aadhar`.`address`;
 CREATE TABLE  `aadhar`.`address` (
   `id` int(15) NOT NULL AUTO_INCREMENT,
   `CO` varchar(50) DEFAULT NULL,
@@ -39,15 +61,75 @@ CREATE TABLE  `aadhar`.`address` (
   `DistrictId` int(10) NOT NULL,
   `StateId` int(10) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `aadhar`.`address`
+--
+
+/*!40000 ALTER TABLE `address` DISABLE KEYS */;
+LOCK TABLES `address` WRITE;
+INSERT INTO `aadhar`.`address` VALUES  (1,'WO Ved Prakash','A-402, OZONE','Survey No. 73/2','Sant Nagar','Lohegaon',1076,352,21);
+UNLOCK TABLES;
+/*!40000 ALTER TABLE `address` ENABLE KEYS */;
+
+
+--
+-- Definition of table `aadhar`.`bankAccounts`
+--
+
+DROP TABLE IF EXISTS `aadhar`.`bankAccounts`;
+CREATE TABLE  `aadhar`.`bankAccounts` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `uid` varchar(15) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `aadhar`.`bankAccounts`
+--
+
+/*!40000 ALTER TABLE `bankAccounts` DISABLE KEYS */;
+LOCK TABLES `bankAccounts` WRITE;
+INSERT INTO `aadhar`.`bankAccounts` VALUES  (1,'123'),
+ (2,'123'),
+ (3,'123'),
+ (4,'123'),
+ (5,'123'),
+ (6,'123456');
+UNLOCK TABLES;
+/*!40000 ALTER TABLE `bankAccounts` ENABLE KEYS */;
+
+
+--
+-- Definition of table `aadhar`.`banks`
+--
+
+DROP TABLE IF EXISTS `aadhar`.`banks`;
 CREATE TABLE  `aadhar`.`banks` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `Name` varchar(100) NOT NULL,
   `Url` varchar(200) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `aadhar`.`banks`
+--
+
+/*!40000 ALTER TABLE `banks` DISABLE KEYS */;
+LOCK TABLES `banks` WRITE;
 INSERT INTO `aadhar`.`banks` VALUES  (8,'State Bank of India','https://secure.onlinesbi.com/TransactionServlet.do'),
  (10,'ICICI','http://netbanking.icici.com/TransactionServlet.action');
+UNLOCK TABLES;
+/*!40000 ALTER TABLE `banks` ENABLE KEYS */;
+
+
+--
+-- Definition of table `aadhar`.`certificates`
+--
+
+DROP TABLE IF EXISTS `aadhar`.`certificates`;
 CREATE TABLE  `aadhar`.`certificates` (
   `id` int(20) NOT NULL AUTO_INCREMENT,
   `UID` varchar(15) NOT NULL,
@@ -55,12 +137,28 @@ CREATE TABLE  `aadhar`.`certificates` (
   `Type` enum('ID','BIRTH','DEATH') DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `aadhar`.`certificates`
+--
+
+/*!40000 ALTER TABLE `certificates` DISABLE KEYS */;
+LOCK TABLES `certificates` WRITE;
+UNLOCK TABLES;
+/*!40000 ALTER TABLE `certificates` ENABLE KEYS */;
+
+
+--
+-- Definition of table `aadhar`.`citizen`
+--
+
+DROP TABLE IF EXISTS `aadhar`.`citizen`;
 CREATE TABLE  `aadhar`.`citizen` (
   `id` int(15) NOT NULL AUTO_INCREMENT,
   `UID` varchar(13) NOT NULL,
   `Password` varchar(32) NOT NULL,
   `Name` varchar(250) NOT NULL,
-  `Gender` enum('M','F','Other') NOT NULL,
+  `Gender` enum('MALE','FEMALE','OTHER') NOT NULL,
   `DateOfBirth` datetime NOT NULL,
   `LocalAddressId` int(15) NOT NULL,
   `PermanentAddressId` int(15) NOT NULL,
@@ -75,6 +173,22 @@ CREATE TABLE  `aadhar`.`citizen` (
   KEY `PermanentAddressId` (`PermanentAddressId`),
   KEY `AccountId` (`AccountId`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `aadhar`.`citizen`
+--
+
+/*!40000 ALTER TABLE `citizen` DISABLE KEYS */;
+LOCK TABLES `citizen` WRITE;
+UNLOCK TABLES;
+/*!40000 ALTER TABLE `citizen` ENABLE KEYS */;
+
+
+--
+-- Definition of table `aadhar`.`city`
+--
+
+DROP TABLE IF EXISTS `aadhar`.`city`;
 CREATE TABLE  `aadhar`.`city` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `city` varchar(100) NOT NULL,
@@ -82,6 +196,13 @@ CREATE TABLE  `aadhar`.`city` (
   PRIMARY KEY (`id`),
   KEY `stateid` (`stateid`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1585 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `aadhar`.`city`
+--
+
+/*!40000 ALTER TABLE `city` DISABLE KEYS */;
+LOCK TABLES `city` WRITE;
 INSERT INTO `aadhar`.`city` VALUES  (1,'Abhayapuri',4),
  (2,'Achabbal',15),
  (3,'Achalpur',21),
@@ -1662,6 +1783,15 @@ INSERT INTO `aadhar`.`city` VALUES  (1,'Abhayapuri',4),
  (1578,'Zira',28),
  (1579,'Zirakpur',28),
  (1580,'Zunheboto',25);
+UNLOCK TABLES;
+/*!40000 ALTER TABLE `city` ENABLE KEYS */;
+
+
+--
+-- Definition of table `aadhar`.`district`
+--
+
+DROP TABLE IF EXISTS `aadhar`.`district`;
 CREATE TABLE  `aadhar`.`district` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `district` varchar(100) NOT NULL,
@@ -1671,6 +1801,13 @@ CREATE TABLE  `aadhar`.`district` (
   UNIQUE KEY `district_2` (`district`,`stateid`),
   KEY `stateid` (`stateid`)
 ) ENGINE=MyISAM AUTO_INCREMENT=628 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `aadhar`.`district`
+--
+
+/*!40000 ALTER TABLE `district` DISABLE KEYS */;
+LOCK TABLES `district` WRITE;
 INSERT INTO `aadhar`.`district` VALUES  (1,'Ambala',13),
  (2,'Bhiwani',13),
  (3,'Faridabad',13),
@@ -2294,6 +2431,15 @@ INSERT INTO `aadhar`.`district` VALUES  (1,'Ambala',13),
  (621,'South Garo Hills',23),
  (622,'West Garo Hills',23),
  (623,'West Khasi Hills',23);
+UNLOCK TABLES;
+/*!40000 ALTER TABLE `district` ENABLE KEYS */;
+
+
+--
+-- Definition of table `aadhar`.`serviceproviders`
+--
+
+DROP TABLE IF EXISTS `aadhar`.`serviceproviders`;
 CREATE TABLE  `aadhar`.`serviceproviders` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `Name` varchar(100) NOT NULL,
@@ -2303,15 +2449,37 @@ CREATE TABLE  `aadhar`.`serviceproviders` (
   `AccountNumber` varchar(20) NOT NULL,
   `BankIFSCCode` varchar(20) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
-INSERT INTO `aadhar`.`serviceproviders` VALUES  (1,'Pringoo.com','5f4dcc3b5aa765d61d8327deb882cf99','https://www.pringoo.com','https://www.responseurl.pringoo.com/','B1000','SBI0001'),
- (2,'iMatrix','8621ffdbc5698829397d97767ac13db3','http://www.iMatrix.com/RequestUrl','http://www.iMatrix.com/ResponseUrl','SBI000001','SBI0000123');
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `aadhar`.`serviceproviders`
+--
+
+/*!40000 ALTER TABLE `serviceproviders` DISABLE KEYS */;
+LOCK TABLES `serviceproviders` WRITE;
+INSERT INTO `aadhar`.`serviceproviders` VALUES  (2,'iMatrix','8621ffdbc5698829397d97767ac13db3','http://www.iMatrix.com/RequestUrl','http://www.iMatrix.com/ResponseUrl','SBI000001','SBI0000123');
+UNLOCK TABLES;
+/*!40000 ALTER TABLE `serviceproviders` ENABLE KEYS */;
+
+
+--
+-- Definition of table `aadhar`.`state`
+--
+
+DROP TABLE IF EXISTS `aadhar`.`state`;
 CREATE TABLE  `aadhar`.`state` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `state` varchar(100) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `state` (`state`)
 ) ENGINE=MyISAM AUTO_INCREMENT=38 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `aadhar`.`state`
+--
+
+/*!40000 ALTER TABLE `state` DISABLE KEYS */;
+LOCK TABLES `state` WRITE;
 INSERT INTO `aadhar`.`state` VALUES  (1,'Andaman and Nicobar Islands'),
  (2,'Andhra Pradesh'),
  (3,'Arunachal Pradesh'),
@@ -2347,6 +2515,15 @@ INSERT INTO `aadhar`.`state` VALUES  (1,'Andaman and Nicobar Islands'),
  (33,'Uttarakhand'),
  (34,'Uttar Pradesh'),
  (35,'West Bengal');
+UNLOCK TABLES;
+/*!40000 ALTER TABLE `state` ENABLE KEYS */;
+
+
+--
+-- Definition of table `aadhar`.`transaction`
+--
+
+DROP TABLE IF EXISTS `aadhar`.`transaction`;
 CREATE TABLE  `aadhar`.`transaction` (
   `id` int(20) NOT NULL AUTO_INCREMENT,
   `UID` varchar(15) NOT NULL,
@@ -2358,6 +2535,16 @@ CREATE TABLE  `aadhar`.`transaction` (
   `Amount` double(20,2) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `aadhar`.`transaction`
+--
+
+/*!40000 ALTER TABLE `transaction` DISABLE KEYS */;
+LOCK TABLES `transaction` WRITE;
+UNLOCK TABLES;
+/*!40000 ALTER TABLE `transaction` ENABLE KEYS */;
+
 
 
 
