@@ -18,7 +18,12 @@
  */
 package com.ignou.aadhar.dao.hibernate;
 
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Restrictions;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.ignou.aadhar.dao.AddressDao;
+import com.ignou.aadhar.domain.Account;
 import com.ignou.aadhar.domain.Address;
 
 /**
@@ -35,5 +40,32 @@ public class AddressDaoHibernate
      */
     public AddressDaoHibernate() {
         super(Address.class);
+    }
+
+    @Override
+    @Transactional
+    public Address fetchOrCreate(Address localAddress) {
+        
+        /* We will check if there is any object with the address values similar
+         * to the one provided in the argument object. If yes, we will return
+         * the same object, otherwise we will create the object and return the
+         * same.
+         */
+        Criteria criteria = getSessionFactory().getCurrentSession()
+                                .createCriteria(Address.class)
+                                .add(Restrictions.ilike("addressLine1", localAddress.getAddressLine1()))
+                                .add(Restrictions.ilike("addressLine2", localAddress.getAddressLine2()))
+                                .add(Restrictions.ilike("addressLine3", localAddress.getAddressLine3()))
+                                .add(Restrictions.eq("city", localAddress.getCity()));
+
+        /* Execute the criteria and see if any records are fetched */
+        Address dbAddress = (Address) criteria.uniqueResult();
+
+        if (dbAddress == null) {
+            /* No record found. Lets create a db record and return the same. */
+            dbAddress = add(localAddress);
+        }
+
+        return dbAddress;
     }
 }

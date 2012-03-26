@@ -18,8 +18,11 @@
  */
 package com.ignou.aadhar.dao.hibernate;
 
+import java.util.Date;
+
 import com.ignou.aadhar.dao.AccountDao;
 import com.ignou.aadhar.domain.Account;
+import com.ignou.aadhar.domain.Citizen;
 
 /**
  * Concrete DAO class for hibernate for performing operations on account table.
@@ -35,5 +38,14 @@ public class AccountDaoHibernate
      */
     public AccountDaoHibernate() {
         super(Account.class);
+    }
+
+    /**
+     * Setting the created date column every time the add method is called.
+     */
+    @Override
+    public Account add(Account model) {
+        model.setCreated(new Date());
+        return super.add(model);
     }
 }

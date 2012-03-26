@@ -18,6 +18,7 @@
  */
 package com.ignou.aadhar.dao.hibernate;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -40,15 +41,12 @@ public class CitizenDaoHibernate extends GenericDaoHibernate<Citizen, Integer>
     }
 
     /**
-     * Overriding the default implementation of Hibernate merge() method, as
-     * the other objects might not be created. So we need to create them as well
-     * for creating the Citizen object successfully.
+     * Setting the created date column every time the add method is called.
      */
     @Override
-    public Citizen add(final Citizen model) {
-        
-        
-        return null;
+    public Citizen add(Citizen model) {
+        model.setCreated(new Date());
+        return super.add(model);
     } 
     
     /**

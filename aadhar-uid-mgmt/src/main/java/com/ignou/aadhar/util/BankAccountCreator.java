@@ -16,17 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.ignou.aadhar.dao;
+package com.ignou.aadhar.util;
 
-import com.ignou.aadhar.domain.Address;
-
-/**
- * Data Access Object providing methods to perform operation on table - Address.
- * @author Deepak Shakya
- *
- */
-public interface AddressDao extends GenericDao<Address, Integer> {
-
-    public Address fetchOrCreate(Address localAddress);
+public class BankAccountCreator {
 
 }

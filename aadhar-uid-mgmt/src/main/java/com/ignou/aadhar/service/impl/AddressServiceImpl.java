@@ -75,4 +75,10 @@ public class AddressServiceImpl implements AddressService {
     public void delete(Integer id) throws RuntimeException {
         addressDao.delete(id);
     }
+
+    @Override
+    @Transactional
+    public Address fetchOrCreate(Address localAddress) {
+        return addressDao.fetchOrCreate(localAddress);
+    }
 }

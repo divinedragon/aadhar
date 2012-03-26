@@ -30,7 +30,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.WebDataBinder;
@@ -44,6 +43,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.ignou.aadhar.constants.Constants;
 import com.ignou.aadhar.constants.UIDStates;
 import com.ignou.aadhar.constants.UIDTypes;
+import com.ignou.aadhar.domain.Account;
 import com.ignou.aadhar.domain.Address;
 import com.ignou.aadhar.domain.Bank;
 import com.ignou.aadhar.domain.Citizen;
@@ -54,6 +54,7 @@ import com.ignou.aadhar.editors.BankEditor;
 import com.ignou.aadhar.editors.CityEditor;
 import com.ignou.aadhar.editors.DistrictEditor;
 import com.ignou.aadhar.editors.StateEditor;
+import com.ignou.aadhar.service.AccountService;
 import com.ignou.aadhar.service.AddressService;
 import com.ignou.aadhar.service.BankService;
 import com.ignou.aadhar.service.CitizenService;
@@ -94,6 +95,9 @@ public class CitizenController {
 
     @Autowired
     private AddressService addressService;
+
+    @Autowired
+    private AccountService accountService;
 
     @InitBinder
     public void initBinder(WebDataBinder dataBinder) {
@@ -178,7 +182,6 @@ public class CitizenController {
 
         /* No error while binding the form data to java objects */
         /* Lets save the new Citizen into the database */
-        //Citizen dbCitizen = citizenService.add(newCitizen);
         Citizen dbCitizen = createCitizenDetails(newCitizen);
 
         /* Citizen added successfully. Lets re-direct to view page */
@@ -407,6 +410,23 @@ public class CitizenController {
     }
 
     private Citizen createCitizenDetails(Citizen citizen) {
+
+        /* Lets populate the address details */
+        citizen = createAddressDetails(citizen);
+
+        /* Lets populate the account details for citizen */
+        citizen = createAccountDetails(citizen);
+
+        /* Set the created date field */
+        citizen.setCreated(new Date());
+
+        /* Lets now save the citizen details in the database */
+        citizenService.add(citizen);
+        return citizen;
+    }
+
+    private Citizen createAddressDetails(Citizen citizen) {
+
         /* Lets check if both Local Address and Permanent Address values are
          * same. Then will have to create just one record and the reference
          * would be set for both Local and Permanent addresses.
@@ -419,29 +439,53 @@ public class CitizenController {
              * local and permanent address of citizen object to the same
              * address instance.
              */
-            Address dbAddress = addressService.add(citizen.getLocalAddress());
+            Address dbAddress = addressService.fetchOrCreate(citizen.getLocalAddress());
             dbPermanentAddress = dbLocalAddress = dbAddress;
 
         } else {
             /* Local and Permanent Address are different. Insert each of those
              * set the individual references.
              */
-            dbLocalAddress = addressService.add(citizen.getLocalAddress());
-            dbPermanentAddress = addressService.add(citizen.getPermanentAddress());
+            dbLocalAddress = addressService.fetchOrCreate(citizen.getLocalAddress());
+            dbPermanentAddress = addressService.fetchOrCreate(citizen.getPermanentAddress());
         }
 
+        /* Set the local address and permanent address references in citizen
+         * object.
+         */
         citizen.setLocalAddress(dbLocalAddress);
         citizen.setPermanentAddress(dbPermanentAddress);
-        return null;
+
+        return citizen;
     }
 
+    private Citizen createAccountDetails(Citizen citizen) {
+
+        /* Call the webservice for bank and generate a new account number */
+        citizen.getAccount().setAccountNumber("ABC" + Math.random() * 100);
+
+        /* Create the new Account record in the database */
+        Account dbAccount = accountService.add(citizen.getAccount());
+
+        /* Set the new dbAccount object in the citizen object */
+        citizen.setAccount(dbAccount);
+
+        return citizen;
+    }
+
+    /**
+     * Determining if the local address and permanent address are same.
+     * @param local Local address details.
+     * @param permanent Permanent address details.
+     * @return TRUE if both local and permanent address objects contain same
+     * address details.
+     */
     private boolean isAddressSame(Address local, Address permanent) {
-        
+
         return (local.getCareOf().equals(permanent.getCareOf())
                 && local.getAddressLine1().equals(permanent.getAddressLine1())
                 && local.getAddressLine2().equals(permanent.getAddressLine2())
                 && local.getAddressLine3().equals(permanent.getAddressLine3())
                 && local.getArea().equals(permanent.getArea()));
-        
     }
 }

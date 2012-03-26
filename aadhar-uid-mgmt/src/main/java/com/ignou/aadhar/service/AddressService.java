@@ -26,4 +26,6 @@ import com.ignou.aadhar.domain.Address;
  *
  */
 public interface AddressService extends GenericService<Address> {
+
+    public Address fetchOrCreate(Address localAddress);
 }
