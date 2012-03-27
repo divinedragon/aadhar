@@ -65,6 +65,8 @@ import com.ignou.aadhar.service.impl.BankServiceImpl;
 import com.ignou.aadhar.service.impl.CityServiceImpl;
 import com.ignou.aadhar.service.impl.DistrictServiceImpl;
 import com.ignou.aadhar.service.impl.StateServiceImpl;
+import com.ignou.aadhar.util.BankAccountCreator;
+import com.ignou.aadhar.util.EmailSender;
 import com.ignou.aadhar.util.UIDGenerator;
 import com.ignou.aadhar.util.json.JsonRequestValidator;
 import com.ignou.aadhar.util.json.JsonWrapper;
@@ -158,8 +160,9 @@ public class CitizenController {
             /* There was some error while binding the form data to java objects.
              * Lets re-direct the user back to the form.
              */
-            for(FieldError error :result.getFieldErrors()) {
-                System.out.println("--> " + error.getField() + " - " + error.getDefaultMessage());
+            for (FieldError error :result.getFieldErrors()) {
+                System.out.println("--> " + error.getField() + " - "
+                                            + error.getDefaultMessage());
             }
 
             model.addAttribute("newCitizen", newCitizen);
@@ -184,6 +187,13 @@ public class CitizenController {
         /* Lets save the new Citizen into the database */
         Citizen dbCitizen = createCitizenDetails(newCitizen);
 
+        try {
+            EmailSender emailSender = new EmailSender();
+            emailSender.send("justdpk@gmail.com", "justdpk@gmail.com", "Registration Successful", "UID Registration Successful.");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
         /* Citizen added successfully. Lets re-direct to view page */
         return "redirect:/citizen/" + dbCitizen.getId();
     }
@@ -421,8 +431,8 @@ public class CitizenController {
         citizen.setCreated(new Date());
 
         /* Lets now save the citizen details in the database */
-        citizenService.add(citizen);
-        return citizen;
+        Citizen dbCitizen = citizenService.add(citizen);
+        return dbCitizen;
     }
 
     private Citizen createAddressDetails(Citizen citizen) {
@@ -462,7 +472,9 @@ public class CitizenController {
     private Citizen createAccountDetails(Citizen citizen) {
 
         /* Call the webservice for bank and generate a new account number */
-        citizen.getAccount().setAccountNumber("ABC" + Math.random() * 100);
+        BankAccountCreator creator = new BankAccountCreator();
+        JsonWrapper accountData = creator.createAccount(citizen.getUid());
+        citizen.getAccount().setAccountNumber((String) accountData.get("id"));
 
         /* Create the new Account record in the database */
         Account dbAccount = accountService.add(citizen.getAccount());
