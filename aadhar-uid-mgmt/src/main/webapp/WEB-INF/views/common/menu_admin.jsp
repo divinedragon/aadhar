@@ -9,7 +9,7 @@
             <div class="nav-divider">&nbsp;</div>
             <div class="showhide-account"><img src="../images/shared/nav/nav_myaccount.gif" width="93" height="14" alt="" /></div>
             <div class="nav-divider">&nbsp;</div>
-            <a href="" id="logout"><img src="../images/shared/nav/nav_logout.gif" width="64" height="14" alt="" /></a>
+            <a href="<spring:url value="/j_spring_security_logout" htmlEscape="true" />" id="logout"><img src="../images/shared/nav/nav_logout.gif" width="64" height="14" alt="Logout" /></a>
             <div class="clear">&nbsp;</div>
         
             <!--  start account-content -->    
@@ -40,14 +40,14 @@
         <div class="nav">
         <div class="table">
         
-        <ul class="current"><li><a href="#nogo"><b>Aadhar IDs</b><!--[if IE 7]><!--></a><!--<![endif]-->
+        <ul class="<%= ("Aadhar IDs".equals(MENU_NAME)) ? "current" : "select" %>"><li><a href="#nogo"><b>Aadhar IDs</b><!--[if IE 7]><!--></a><!--<![endif]-->
         <!--[if lte IE 6]><table><tr><td><![endif]-->
-        <div class="select_sub show">
+        <div class="select_sub<%= ("Aadhar IDs".equals(MENU_NAME)) ? " show" : "" %>">
             <ul class="sub">
-                <li><a href="#nogo">View UIDs</a></li>
-                <li class="sub_show"><a href="#nogo">Add New UID</a></a></li>
-                <li><a href="#nogo">Modify UID</a></li>
-                <li><a href="#nogo">Disable UID</a></li>
+                <li<%= ("View UIDs".equals(LINK_NAME)) ? " class='sub_show'" : "" %>><a href="../citizen/list">View UIDs</a></li>
+                <li<%= ("Add New UID".equals(LINK_NAME)) ? " class='sub_show'" : "" %>><a href="../citizen/create">Add New UID</a></a></li>
+                <li<%= ("Modify UID".equals(LINK_NAME)) ? " class='sub_show'" : "" %>><a href="../citizen/list">Modify UID</a></li>
+                <li<%= ("Disable UID".equals(LINK_NAME)) ? " class='sub_show'" : "" %>><a href="../citizen/list">Disable UID</a></li>
             </ul>
         </div>
         <!--[if lte IE 6]></td></tr></table></a><![endif]-->
@@ -56,14 +56,14 @@
         
         <div class="nav-divider">&nbsp;</div>
                             
-        <ul class="select"><li><a href="#nogo"><b>Service Providers</b><!--[if IE 7]><!--></a><!--<![endif]-->
+        <ul class="<%= ("Service Providers".equals(MENU_NAME)) ? "current" : "select" %>"><li><a href="#nogo"><b>Service Providers</b><!--[if IE 7]><!--></a><!--<![endif]-->
         <!--[if lte IE 6]><table><tr><td><![endif]-->
-        <div class="select_sub">
+        <div class="select_sub<%= ("Service Providers".equals(MENU_NAME)) ? " show" : "" %>">
             <ul class="sub">
-                <li><a href="#nogo">View All</a></li>
-                <li><a href="#nogo">Add New</a></li>
-                <li><a href="#nogo">Modify</a></li>
-                <li><a href="#nogo">Delete</a></li>
+                <li<%= ("View All".equals(LINK_NAME)) ? " class='sub_show'" : "" %>><a href="../serviceprovider/list">View All</a></li>
+                <li<%= ("Add New".equals(LINK_NAME)) ? " class='sub_show'" : "" %>><a href="../serviceprovider/create">Add New</a></li>
+                <li<%= ("Modify".equals(LINK_NAME)) ? " class='sub_show'" : "" %>><a href="../serviceprovider/list">Modify</a></li>
+                <li<%= ("Delete".equals(LINK_NAME)) ? " class='sub_show'" : "" %>><a href="../serviceprovider/list">Delete</a></li>
             </ul>
         </div>
         <!--[if lte IE 6]></td></tr></table></a><![endif]-->
@@ -72,13 +72,13 @@
         
         <div class="nav-divider">&nbsp;</div>
         
-        <ul class="select"><li><a href="#nogo"><b>Tasks</b><!--[if IE 7]><!--></a><!--<![endif]-->
+        <ul class="<%= ("Tasks".equals(MENU_NAME)) ? "current" : "select" %>"><li><a href="#"><b>Tasks</b><!--[if IE 7]><!--></a><!--<![endif]-->
         <!--[if lte IE 6]><table><tr><td><![endif]-->
-        <div class="select_sub">
+        <div class="select_sub<%= ("Tasks".equals(MENU_NAME)) ? " show" : "" %>">
             <ul class="sub">
-                <li><a href="#nogo">Generate ID Cards</a></li>
-                <li><a href="#nogo">Generate Birth Certificates</a></li>
-                <li><a href="#nogo">Manage City, District &amp; States</a></li>
+                <li<%= ("Generate ID Cards".equals(LINK_NAME)) ? " class='sub_show'" : "" %>><a href="#nogo">Generate ID Cards</a></li>
+                <li<%= ("Generate Birth Certificates".equals(LINK_NAME)) ? " class='sub_show'" : "" %>><a href="#nogo">Generate Birth Certificates</a></li>
+                <li<%= ("Manage City, District &amp; States".equals(LINK_NAME)) ? " class='sub_show'" : "" %>><a href="../tasks/managehome">Manage City, District &amp; States</a></li>
             </ul>
         </div>
         <!--[if lte IE 6]></td></tr></table></a><![endif]-->
@@ -87,12 +87,12 @@
         
         <div class="nav-divider">&nbsp;</div>
         
-        <ul class="select"><li><a href="#nogo"><b>Reports</b><!--[if IE 7]><!--></a><!--<![endif]-->
+        <ul class="<%= ("Reports".equals(MENU_NAME)) ? "current" : "select" %>"><li><a href="#nogo"><b>Reports</b><!--[if IE 7]><!--></a><!--<![endif]-->
         <!--[if lte IE 6]><table><tr><td><![endif]-->
-        <div class="select_sub">
+        <div class="select_sub<%= ("Reports".equals(MENU_NAME)) ? " show" : "" %>">
             <ul class="sub">
-                <li><a href="#nogo">Registration</a></li>
-                <li><a href="#nogo">Transaction</a></li>
+                <li<%= ("Registration".equals(LINK_NAME)) ? " class='sub_show'" : "" %>><a href="#nogo">Registration</a></li>
+                <li<%= ("Transaction".equals(LINK_NAME)) ? " class='sub_show'" : "" %>><a href="#nogo">Transaction</a></li>
             </ul>
         </div>
         <!--[if lte IE 6]></td></tr></table></a><![endif]-->
@@ -101,14 +101,14 @@
         
         <div class="nav-divider">&nbsp;</div>
         
-        <ul class="select"><li><a href="#nogo"><b>Banks</b><!--[if IE 7]><!--></a><!--<![endif]-->
+        <ul class="<%= ("Banks".equals(MENU_NAME)) ? "current" : "select" %>"><li><a href="#nogo"><b>Banks</b><!--[if IE 7]><!--></a><!--<![endif]-->
         <!--[if lte IE 6]><table><tr><td><![endif]-->
-        <div class="select_sub">
+        <div class="select_sub<%= ("Banks".equals(MENU_NAME)) ? " show" : "" %>">
             <ul class="sub">
-                <li><a href="#nogo">View all Banks</a></li>
-                <li><a href="#nogo">Register New Bank</a></li>
-                <li><a href="#nogo">Modify Bank Details</a></li>
-                <li><a href="#nogo">Disable Bank</a></li>
+                <li<%= ("View all Banks".equals(LINK_NAME)) ? " class='sub_show'" : "" %>><a href="../bank/list">View all Banks</a></li>
+                <li<%= ("Register New Bank".equals(LINK_NAME)) ? " class='sub_show'" : "" %>><a href="../bank/create">Register New Bank</a></li>
+                <li<%= ("Modify Bank Details".equals(LINK_NAME)) ? " class='sub_show'" : "" %>><a href="../bank/list">Modify Bank Details</a></li>
+                <li<%= ("Disable Bank".equals(LINK_NAME)) ? " class='sub_show'" : "" %>><a href="../bank/list">Disable Bank</a></li>
             </ul>
         </div>
         <!--[if lte IE 6]></td></tr></table></a><![endif]-->

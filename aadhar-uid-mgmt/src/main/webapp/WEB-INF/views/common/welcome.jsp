@@ -9,6 +9,8 @@
 %>
 <%
     String PAGE_TITLE = ":: Aadhar :: Home Page";
+    String MENU_NAME  = "";
+    String LINK_NAME  = "";
 %>
 <%@include file="../common/include_header.jsp" %>
 

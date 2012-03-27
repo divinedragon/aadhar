@@ -4,6 +4,8 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%
     String PAGE_TITLE = ":: Aadhar :: Manage States, Districts and Cities";
+    String MENU_NAME  = "Tasks";
+    String LINK_NAME  = "Manage City, District &amp; States";
 %>
 <%@include file="../common/include_header.jsp" %>
 

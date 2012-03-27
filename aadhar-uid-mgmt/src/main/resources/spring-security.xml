@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+    xmlns:beans="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+             http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+             http://www.springframework.org/schema/security
+             http://www.springframework.org/schema/security/spring-security-3.0.3.xsd">
+
+<!--
+================================================================================
+
+                             SECURITY BEANS
+
+This section stores the security configuration for the application.
+
+================================================================================
+-->
+    <http auto-config="true" access-denied-page="/common/access_denied">
+        <form-login login-page="/common/login" authentication-failure-url="/common/login?login_error=true" />
+        <intercept-url pattern="/common/login" filters="none" />
+        <intercept-url pattern="/common/welcome" access="ROLE_OFFICIAL, ROLE_CITIZEN, ROLE_ADMIN" />
+        <intercept-url pattern="/css/**" filters="none" />
+        <intercept-url pattern="/js/**" filters="none" />
+        <intercept-url pattern="/images/**" filters="none" />
+        <intercept-url pattern="/tasks/**" access="ROLE_OFFICIAL, ROLE_ADMIN" />
+        <intercept-url pattern="/citizen/**" access="ROLE_OFFICIAL, ROLE_ADMIN" />
+        <intercept-url pattern="/bank/**" access="ROLE_OFFICIAL, ROLE_ADMIN" />
+        <intercept-url pattern="/serviceprovider/**" access="ROLE_OFFICIAL, ROLE_ADMIN" />
+        <intercept-url pattern="/city/**" access="ROLE_CITIZEN, ROLE_OFFICIAL, ROLE_ADMIN" />
+        <intercept-url pattern="/district/**" access="ROLE_CITIZEN, ROLE_OFFICIAL, ROLE_ADMIN" />
+        <intercept-url pattern="/state/**" access="ROLE_CITIZEN, ROLE_OFFICIAL, ROLE_ADMIN" />
+    </http>
+
+
+    <beans:bean id="securityCheckService" class="org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl">
+        <beans:property name="dataSource" ref="dataSource" />
+        <beans:property name="enableGroups" value="false" />
+        <beans:property name="enableAuthorities" value="true" />
+        <beans:property name="usersByUsernameQuery">
+            <beans:value>
+                SELECT UID, Password, 'true' AS enabled
+                FROM citizen
+                WHERE UID = ?
+                AND Status = 'ACTIVE';
+            </beans:value>
+        </beans:property>
+        <beans:property name="authoritiesByUsernameQuery">
+            <beans:value>
+                SELECT UID, concat('ROLE_', AccessRole) AccessRole FROM citizen
+                WHERE UID = ?;
+            </beans:value>
+        </beans:property>
+    </beans:bean>
+
+    <authentication-manager>
+        <authentication-provider user-service-ref="securityCheckService">
+            <password-encoder hash="md5" />
+        </authentication-provider>
+    </authentication-manager>
+
+</beans:beans>

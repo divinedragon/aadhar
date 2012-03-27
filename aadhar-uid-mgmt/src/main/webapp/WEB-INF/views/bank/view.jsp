@@ -4,6 +4,8 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%
     String PAGE_TITLE = ":: Aadhar :: View Bank Details";
+    String MENU_NAME  = "Banks";
+    String LINK_NAME  = "View all Banks";
 %>
 <%@include file="../common/include_header.jsp" %>
 

@@ -4,6 +4,8 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%
     String PAGE_TITLE = ":: Aadhar :: View all Banks";
+    String MENU_NAME  = "Banks";
+    String LINK_NAME  = "View all Banks";
 %>
 <%@include file="../common/include_header.jsp" %>
 
@@ -163,7 +165,7 @@
         /* Check which button did the user press */
         if (command == "Add") {
             /* Add button pressed. Re-direct the user to Add screen */
-            alert("Add functionality not yet implemented");
+        	window.location.href = "create";
 
         } else {
             /* For update, delete and view, the user needs to select a row
@@ -181,13 +183,19 @@
              */
              if (command == "Delete") {
                  /* User requested delete operation. */
-                 alert("Delete functionality not yet implemented");
+                 var spName = $('.trSelected td:nth-child(2) div', grid).text();
+                 var confirmMsg = "Delete this Record?\n";
+                 confirmMsg += "ID   : " + id + "\n";
+                 confirmMsg += "Name : " + spName
+                 if (confirm(confirmMsg)) {
+                     window.location.href = "delete?id=" + id;
+                 }
              } else if (command == "Edit") {
                  /* User requested edit operation */
-                 alert("Update functionality not yet implemented");
+            	 window.location.href = "edit?id=" + id;
              } else if (command == "View") {
                  /* User requested view operation */
-                 alert("View functionality not yet implemented");
+            	 window.location.href = "" + id;
              }
         }
     }

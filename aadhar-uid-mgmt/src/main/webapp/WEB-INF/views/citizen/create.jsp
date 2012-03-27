@@ -4,6 +4,8 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%
     String PAGE_TITLE = ":: Aadhar :: Add New Citizen";
+    String MENU_NAME  = "Aadhar IDs";
+    String LINK_NAME  = "Add New UID";
 %>
 <%@include file="../common/include_header.jsp" %>
 

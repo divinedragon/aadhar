@@ -53,7 +53,7 @@
     <tx:annotation-driven proxy-target-class="true" />
 
     <!-- Default page when only / is provided in URL -->
-    <mvc:view-controller path="/" view-name="common/welcome" />
+    <mvc:view-controller path="/" view-name="index" />
 
     <!-- Excluding certain directories containing static resources -->
     <mvc:resources mapping="/css/**" location="/resources/css/" />
@@ -168,3 +168,4 @@ This section stores the configuration for the utility classes and interfaces.
 	    <property name="mailSender" ref="gmailServer" />
 	</bean>
 </beans>
+
