@@ -69,4 +69,11 @@ public interface CitizenDao extends GenericDao<Citizen, Integer> {
     public List<Map<String, Object>> getCitizens(String searchField,
             String searchValue, Integer pageNumber, Integer recordsPerPage,
             String sortField, String sortOrder);
+
+    /**
+     * Fetches the citizen record for the provided UID.
+     * @param uid UID for which citizen record needs to be fetched.
+     * @return Citizen record object.
+     */
+    public Citizen getByUID(String uid);
 }

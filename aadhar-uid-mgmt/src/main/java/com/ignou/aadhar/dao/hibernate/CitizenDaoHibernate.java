@@ -22,6 +22,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.hibernate.criterion.Restrictions;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.ignou.aadhar.constants.UIDStates;
 import com.ignou.aadhar.dao.CitizenDao;
 import com.ignou.aadhar.domain.Citizen;
 
@@ -100,5 +104,20 @@ public class CitizenDaoHibernate extends GenericDaoHibernate<Citizen, Integer>
             String sortField, String sortOrder) {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    /**
+     * Fetches the citizen record for the provided UID.
+     * @param uid UID for which citizen record needs to be fetched.
+     * @return Citizen record object.
+     */
+    @Override
+    @Transactional
+    public Citizen getByUID(String uid) {
+        return (Citizen) getSessionFactory().getCurrentSession()
+                            .createCriteria(Citizen.class)
+                            .add(Restrictions.eq("uid", uid))
+                            .add(Restrictions.eq("status", UIDStates.ACTIVE.getCode()))
+                            .uniqueResult();
     }
 }

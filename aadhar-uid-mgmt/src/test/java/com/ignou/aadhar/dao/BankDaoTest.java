@@ -34,13 +34,13 @@ import com.ignou.aadhar.domain.Bank;
 
 /**
  * Unit Testing class for BankDao interface.
- * 
+ *
  * @author Deepak Shakya
- * 
+ *
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:spring-context.xml",
-        "classpath:spring-tests.xml" })
+                                    "classpath:spring-tests.xml" })
 public class BankDaoTest extends HibernateDaoSupport {
 
     @Autowired
@@ -135,9 +135,5 @@ public class BankDaoTest extends HibernateDaoSupport {
         } catch (Exception e) {
             Assert.assertNotNull(e);
         }
-    }
-
-    public static void main(String[] args) {
-        System.out.println(System.currentTimeMillis());
     }
 }

@@ -100,4 +100,17 @@ public class ServiceProviderServiceImpl implements ServiceProviderService {
         return serviceProviderDao.getServiceProviders(searchField, searchValue,
                               pageNumber, recordsPerPage, sortField, sortOrder);
     }
+
+    /**
+     * Fetches the Service Provider object corresponding to the parameters Name
+     * and Password.
+     * @param name Name with which Service Provider is registered.
+     * @param password Password allocated to Service Provider for authentication
+     * @return Service Provider record object if it exists.
+     */
+    @Override
+    @Transactional
+    public ServiceProvider getByNameAndPassword(String name, String password) {
+        return serviceProviderDao.getByNameAndPassword(name, password);
+    }
 }

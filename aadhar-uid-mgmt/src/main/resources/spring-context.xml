@@ -114,6 +114,9 @@ project.
     <bean id="transactionDao" class="com.ignou.aadhar.dao.hibernate.TransactionDaoHibernate">
         <property name="sessionFactory" ref="hibernateSessionFactory" />
     </bean>
+    <bean id="transactionTokenDao" class="com.ignou.aadhar.dao.hibernate.TransactionTokenDaoHibernate">
+        <property name="sessionFactory" ref="hibernateSessionFactory" />
+    </bean>
 
 
 
@@ -138,6 +141,7 @@ project.
      <bean id="citizenService" class="com.ignou.aadhar.service.impl.CitizenServiceImpl" />
      <bean id="serviceProviderService" class="com.ignou.aadhar.service.impl.ServiceProviderServiceImpl" />
      <bean id="transactionService" class="com.ignou.aadhar.service.impl.TransactionServiceImpl" />
+     <bean id="transactionTokenService" class="com.ignou.aadhar.service.impl.TransactionTokenServiceImpl" />
 
 
 
@@ -151,21 +155,6 @@ This section stores the configuration for the utility classes and interfaces.
 ================================================================================
 -->
 
-	<bean id="gmailServer" class="org.springframework.mail.javamail.JavaMailSenderImpl">
-        <property name="host" value="smtp.gmail.com" />
-        <property name="port" value="587" />
-        <property name="username" value="justdpk" />
-        <property name="password" value="Timbuk2dr@g0n" />
-        <property name="javaMailProperties">
-            <props>
-                <prop key="mail.smtp.auth">true</prop>
-                <prop key="mail.smtp.starttls.enable">true</prop>
-            </props>
-        </property>
-    </bean>
-	
-	<bean id="mailSender" class="com.ignou.aadhar.util.EmailSender">
-	    <property name="mailSender" ref="gmailServer" />
-	</bean>
+	<bean id="mailSender" class="com.ignou.aadhar.util.EmailSender" />
 </beans>
 

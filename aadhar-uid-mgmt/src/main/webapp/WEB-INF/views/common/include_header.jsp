@@ -9,17 +9,21 @@
     /* We will include the appropriate header file */
     
     Object springSecurityContext = session.getValue("SPRING_SECURITY_CONTEXT");
+    String strSecurityContext = null;
 
-    if (springSecurityContext == null) {
-        return ;
+    if (springSecurityContext != null) {
+        strSecurityContext =  springSecurityContext.toString();
     }
-
-    String strSecurityContext = springSecurityContext.toString();
 
     if (strSecurityContext != null && strSecurityContext.contains("ROLE_OFFICIAL")) {
 %>
         <%@include file="header_admin.jsp" %>
         <%@include file="menu_admin.jsp" %>
+<%
+    } else {
+%>
+        <%@include file="header_all.jsp" %>
+        <%@include file="menu_all.jsp" %>
 <%
     }
 %>

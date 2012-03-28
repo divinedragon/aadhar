@@ -189,7 +189,7 @@ public class CitizenController {
 
         try {
             EmailSender emailSender = new EmailSender();
-            emailSender.send("justdpk@gmail.com", "justdpk@gmail.com", "Registration Successful", "UID Registration Successful.");
+            emailSender.send("justdpk@gmail.com", "Registration Successful", "UID Registration Successful.");
         } catch (Exception e) {
             e.printStackTrace();
         }

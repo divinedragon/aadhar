@@ -28,6 +28,7 @@ import org.hibernate.criterion.CriteriaSpecification;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ignou.aadhar.dao.ServiceProviderDao;
 import com.ignou.aadhar.domain.ServiceProvider;
@@ -157,5 +158,22 @@ public class ServiceProviderDaoHibernate
         }
 
         return returnRecords;
+    }
+
+    /**
+     * Fetches the Service Provider object corresponding to the parameters Name
+     * and Password.
+     * @param name Name with which Service Provider is registered.
+     * @param password Password allocated to Service Provider for authentication
+     * @return Service Provider record object if it exists.
+     */
+    @Override
+    @Transactional
+    public ServiceProvider getByNameAndPassword(String name, String password) {
+        return (ServiceProvider) getSessionFactory().getCurrentSession()
+                                .createCriteria(ServiceProvider.class)
+                                .add(Restrictions.eq("name", name))
+                                .add(Restrictions.eq("password", password))
+                                .uniqueResult();
     }
 }

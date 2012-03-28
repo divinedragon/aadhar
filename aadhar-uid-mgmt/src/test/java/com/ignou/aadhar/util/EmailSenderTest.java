@@ -18,6 +18,8 @@
  */
 package com.ignou.aadhar.util;
 
+import junit.framework.Assert;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,9 +42,11 @@ public class EmailSenderTest {
     @Test
     public void testSend() {
 
-        mailSender.send("justdpk@gmail.com",
-               "justdpk@gmail.com",
-               "Testing123",
-               "Testing only \n\n Hello Spring Email Sender");
+        try {
+            mailSender.send("justdpk@gmail.com", "Testing123",
+               "<h1>Testing onlyHello Spring Email Sender</h1>");
+        } catch (Exception e) {
+            Assert.fail("Mail was not sent.");
+        }
     }
 }

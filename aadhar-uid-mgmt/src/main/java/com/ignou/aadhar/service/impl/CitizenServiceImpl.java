@@ -122,4 +122,15 @@ public class CitizenServiceImpl implements CitizenService {
     public Map<String, String> getAccessRoles() {
         return citizenDao.getAccessRoles();
     }
+
+    /**
+     * Fetches the citizen record for the provided UID.
+     * @param uid UID for which citizen record needs to be fetched.
+     * @return Citizen record object.
+     */
+    @Override
+    @Transactional
+    public Citizen getByUID(String uid) {
+        return citizenDao.getByUID(uid);
+    }
 }

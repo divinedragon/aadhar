@@ -18,48 +18,74 @@
  */
 package com.ignou.aadhar.util;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.mail.MailSender;
-import org.springframework.mail.SimpleMailMessage;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
+/**
+ * Email sending utility class.
+ * @author Deepak Shakya
+ *
+ */
 public class EmailSender {
 
-    @Autowired
-    private MailSender mailSender;
+    /**
+     * Sends the email for the specified parameter values.
+     * @param to Recipient of the email.
+     * @param subject Subject of the email.
+     * @param mailContent HTML content of the email.
+     */
+    public void send(String to, String subject, String mailContent) {
 
-    public MailSender getMailSender() {
-        return mailSender;
-    }
+        /* Load the Mail configuration properties */
+        Properties mailProperties = new Properties();
+        InputStream in = this.getClass().getClassLoader()
+                            .getResourceAsStream("mail.properties");
 
-    public void setMailSender(MailSender mailSender) {
-        this.mailSender = mailSender;
-    }
+        try {
+            mailProperties.load(in);
 
-    public void send(String from, String to, String subject,
-                                            String mailContent) {
+            /* Get the mail session object */
+            Session session = Session.getDefaultInstance(mailProperties);
 
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom(from);
-        message.setTo(to);
-        message.setSubject(subject);
-        message.setText(mailContent);
+            /* Create a default MimeMessage object. */
+            MimeMessage message = new MimeMessage(session);
 
-        mailSender.send(message);
-    }
+            /* Set From: header field of the header. */
+            message.setFrom(new InternetAddress(mailProperties
+                                            .getProperty("mail.smtp.from")));
 
-    public static void main( String[] args )
-    {
-        ApplicationContext context = 
-             new ClassPathXmlApplicationContext("spring-context.xml");
- 
-        EmailSender mm = (EmailSender) context.getBean("mailSender");
-        mm.send("justdpk@gmail.com",
-               "justdpk@gmail.com",
-               "Testing123", 
-               "Testing only \n\n Hello Spring Email Sender");
- 
+            /* Set To: header field of the header. */
+            message.addRecipient(Message.RecipientType.TO,
+                                                    new InternetAddress(to));
+
+            /* Set Subject: header field */
+            message.setSubject(subject);
+
+            /* Actual HTML content */
+            message.setContent(mailContent, "text/html");
+
+            String strHost = mailProperties.getProperty("mail.smtp.host");
+            String strUsername = mailProperties.getProperty("mail.smtp.user");
+            String strPass = mailProperties.getProperty("mail.smtp.password");
+
+            /* Send message */
+            Transport transport = session.getTransport("smtp");
+            transport.connect(strHost, strUsername, strPass);
+            transport.sendMessage(message, message.getAllRecipients());
+            transport.close();
+
+        } catch (MessagingException mex) {
+            mex.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

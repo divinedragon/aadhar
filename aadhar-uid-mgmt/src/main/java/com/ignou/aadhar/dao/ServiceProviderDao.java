@@ -48,4 +48,13 @@ public interface ServiceProviderDao
             String searchValue, Integer pageNumber, Integer recordsPerPage,
             String sortField, String sortOrder);
 
+    /**
+     * Fetches the Service Provider object corresponding to the parameters Name
+     * and Password.
+     * @param name Name with which Service Provider is registered.
+     * @param password Password allocated to Service Provider for authentication
+     * @return Service Provider record object if it exists.
+     */
+    public ServiceProvider getByNameAndPassword(String name, String password);
+
 }

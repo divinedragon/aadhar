@@ -30,6 +30,9 @@ This section stores the security configuration for the application.
         <intercept-url pattern="/city/**" access="ROLE_CITIZEN, ROLE_OFFICIAL, ROLE_ADMIN" />
         <intercept-url pattern="/district/**" access="ROLE_CITIZEN, ROLE_OFFICIAL, ROLE_ADMIN" />
         <intercept-url pattern="/state/**" access="ROLE_CITIZEN, ROLE_OFFICIAL, ROLE_ADMIN" />
+        <intercept-url pattern="/transaction/demo" filters="none" />
+        <intercept-url pattern="/transaction/authenticate" filters="none" />
+        <intercept-url pattern="/transaction/bankresponse" filters="none" />
     </http>
 
 
