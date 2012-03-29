@@ -18,9 +18,7 @@
  */
 package com.ignou.aadhar.controllers;
 
-import java.net.Authenticator.RequestorType;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -355,7 +353,7 @@ public class CityController {
                 cityData.put("name", city.getCity());
                 data.add(cityData);
             }
-            
+
             /* Convert the city data as Json Wrapper instance */
             jsonData = new JsonWrapper(data, "Success");
         } else {

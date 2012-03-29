@@ -18,7 +18,10 @@
  */
 package com.ignou.aadhar.controllers;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -26,10 +29,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.ignou.aadhar.constants.Constants;
 import com.ignou.aadhar.constants.TransactionStatus;
 import com.ignou.aadhar.domain.Citizen;
 import com.ignou.aadhar.domain.ServiceProvider;
@@ -43,6 +49,8 @@ import com.ignou.aadhar.util.EmailSender;
 import com.ignou.aadhar.util.MD5Generator;
 import com.ignou.aadhar.util.TokenGenerator;
 import com.ignou.aadhar.util.UIDGenerator;
+import com.ignou.aadhar.util.json.JsonRequestValidator;
+import com.ignou.aadhar.util.json.JsonWrapper;
 
 /**
  * Controller to handle the requests for managing transactions as requested by
@@ -261,4 +269,165 @@ public class TransactionController {
 
         return "transaction/status";
     }
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    @RequestMapping(value = "/list", method = RequestMethod.GET)
+    public String list() {
+
+        return "transaction/grid";
+    }
+
+    @RequestMapping(value = "/list/json", method = RequestMethod.GET)
+    @ResponseBody
+    public JsonWrapper listJson(
+            @RequestParam(value = "page") Integer page,
+            @RequestParam(value = "rp") Integer recordCount,
+            @RequestParam(value = "sortname") String sortField,
+            @RequestParam(value = "sortorder") String sortOrder,
+            @RequestParam(value = "query") String searchValue,
+            @RequestParam(value = "qtype") String searchField) {
+
+        /* If there is no recordCount value, lets set from our side */
+        if (recordCount == null || recordCount == 0) {
+            recordCount = Constants.MAX_RECORDS_PER_PAGE;
+        }
+
+        /* Also, set the page index to start page if not provided. Otherwise, we
+         * will calculate the corresponding record offset.
+         */
+        int startIndex = 0;
+        if (page == null || page == 0) {
+            page = Constants.START_PAGE;
+        } else {
+            startIndex = (page - 1) * recordCount;
+        }
+
+        /* Also, if there is no search parameter provided, we will assign uid
+         * as the default search parameter.
+         */
+        if (searchField == null || searchField.isEmpty()) {
+            searchField = "uid";
+        }
+
+        /* Lets start preparing the JSON output */
+        StringBuilder outputData = new StringBuilder();
+        outputData.append("{ \"page\" : \"" + startIndex + "\", ");
+        outputData.append("\"rp\" : \"" + recordCount + "\", ");
+        outputData.append("\"sortname\" : \"" + sortField + "\", ");
+        outputData.append("\"sortorder\" : \"" + sortOrder + "\", ");
+        outputData.append("\"" + searchField + "\": \"" + searchValue + "\" }");
+
+        JsonWrapper jsonData = getTransactionList(outputData.toString());
+
+        /* Add the additional parameters required at the UI */
+        jsonData.addParam("pageCount", page);
+        if (!jsonData.containsKey("total")) {
+            jsonData.addParam("total", 0);
+        }
+
+        return jsonData;
+    }
+
+    @RequestMapping(value = "/list/{filter}", method = RequestMethod.GET)
+    @ResponseBody
+    private JsonWrapper getTransactionList(@PathVariable String filter) {
+
+        JsonWrapper jsonData;
+
+        String[] validParams = { "page", "rp", "sortname", "sortorder", "uid",
+                                 "name", "serviceprovider", "clientTxnId",
+                                 "bankTxnId", "status" };
+
+        try {
+            Map<String, String> paramMap = JsonRequestValidator
+                                                .validateRequestParams(filter,
+                                                        validParams);
+
+            String searchField = null;
+            String searchValue = null;
+            String sortField = paramMap.get("sortname");
+            String sortOrder = paramMap.get("sortorder");
+
+            /* Get the recordsPerPage value */
+            Integer recordsPerPage = null;
+            if (paramMap.get("rp") != null) {
+                recordsPerPage = new Integer(paramMap.get("rp"));
+            }
+
+            Integer pageNumber = null;
+            if (paramMap.get("page") != null) {
+                pageNumber = new Integer(paramMap.get("page"));
+            }
+
+            /* Determine which field is being searched */
+            if (paramMap.get("uid") != null) {
+                searchField = "uid";
+                searchValue = paramMap.get("uid");
+
+            } else if (paramMap.get("serviceprovider") != null) {
+                searchField = "serviceprovider";
+                searchValue = paramMap.get("serviceprovider");
+
+            } else if (paramMap.get("clientTxnId") != null) {
+                searchField = "clientTxnId";
+                searchValue = paramMap.get("clientTxnId");
+
+            } else if (paramMap.get("bankTxnId") != null) {
+                searchField = "bankTxnId";
+                searchValue = paramMap.get("bankTxnId");
+
+            } else if (paramMap.get("status") != null) {
+                searchField = "status";
+                searchValue = paramMap.get("status");
+            }
+
+            /* Lets fetch the records from the database for the search condition
+             * provided in the request.
+             */
+            List<Map<String, Object>> cities = transactionService
+                                                .getTransactions(searchField,
+                                                    searchValue, pageNumber,
+                                                    recordsPerPage, sortField,
+                                                    sortOrder);
+
+            /* Check if any records were fetched successfully */
+            if (cities != null && !cities.isEmpty()) {
+
+                /* Convert the city data as Json Wrapper instance */
+                jsonData = new JsonWrapper(cities, "Success");
+                jsonData.put("total", cities.get(0).get("totalCount"));
+            } else {
+
+                /* Because no records were fetched, we will return empty list */
+                jsonData = new JsonWrapper(new ArrayList(), "Failure",
+                                    "No records found for search parameters");
+            }
+
+            jsonData.put("page", pageNumber);
+        } catch (Exception e) {
+            jsonData = new JsonWrapper("Failure", e.getMessage());
+            e.printStackTrace();
+        }
+
+        return jsonData;
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 }

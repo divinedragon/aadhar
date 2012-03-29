@@ -357,7 +357,8 @@
 								if (typeof row.cell[idx] == "undefined") {
 									td.innerHTML = (row.cell[idx] != null) ? row.cell[idx] : '';//null-check for Opera-browser
 								} else {
-									td.innerHTML = row.cell[p.colModel[idx].name];
+									var jsonCellVal = row.cell[p.colModel[idx].name];
+									td.innerHTML = ((jsonCellVal == undefined) || (jsonCellVal == null)) ? "" : jsonCellVal;
 								}
 
 								$(td).attr('abbr', $(this).attr('abbr'));

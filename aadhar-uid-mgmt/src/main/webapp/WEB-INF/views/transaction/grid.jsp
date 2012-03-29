@@ -3,7 +3,7 @@
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%
-    String PAGE_TITLE = ":: Aadhar :: View all Banks";
+    String PAGE_TITLE = ":: Aadhar :: View all Transactions";
     String MENU_NAME  = "Banks";
     String LINK_NAME  = "View all Banks";
 %>
@@ -16,7 +16,7 @@
 <link type='text/css' href='../css/basic_ie.css' rel='stylesheet' media='screen' />
 <![endif]-->
 
-<div id="page-heading"><h1>View all Banks</h1></div>
+<div id="page-heading"><h1>View all Transactions</h1></div>
 
 <table border="0" width="100%" cellpadding="0" cellspacing="0" id="content-table">
 <tr>
@@ -36,7 +36,7 @@
     <tr valign="top">
     <td>
         <div style="float:left;margin-right:10px;">
-            <div id="bankTable"></div>
+            <div id="transactionTable"></div>
         </div>
     </td>
     </tr>
@@ -65,8 +65,8 @@
 <script type="text/javascript">
     <!--
     /* Flexigrid for City Table */
-    $("#bankTable").flexigrid({
-        url: '../bank/list/json',
+    $("#transactionTable").flexigrid({
+        url: '../transaction/list/json',
         method : "GET",
         dataType: 'json',
         colModel : [
@@ -79,52 +79,82 @@
                 hide : true
             },
             {
-                display: 'Name',
+                display: 'UID',
+                name : 'uid',
+                width : 150,
+                sortable : true,
+                align: 'left'
+            },
+            {
+                display: 'Citizen Name',
                 name : 'name',
                 width : 150,
                 sortable : true,
                 align: 'left'
             },
             {
-                display: 'Url',
-                name : 'url',
+                display: 'Service Provider',
+                name : 'serviceprovider',
                 width : 650,
+                sortable : true,
+                align: 'left'
+            },
+            {
+                display: 'Client Txn ID',
+                name : 'clientTxnId',
+                width : 100,
+                sortable : true,
+                align: 'left'
+            },
+            {
+                display: 'Bank Txn ID',
+                name : 'bankTxnId',
+                width : 100,
+                sortable : true,
+                align: 'left'
+            },
+            {
+                display: 'Status',
+                name : 'status',
+                width : 100,
+                sortable : true,
+                align: 'left'
+            },
+            {
+                display: 'Date',
+                name : 'created',
+                width : 100,
+                sortable : true,
+                align: 'left'
+            },
+            {
+                display: 'Amount',
+                name : 'amount',
+                width : 100,
                 sortable : true,
                 align: 'left'
             }
         ],
         buttons : [
             {
-                name: 'Add',
-                bclass: 'add',
-                onpress : gridButtonAction
-            },
-            {
-                name: 'Edit',
-                bclass: 'edit',
-                onpress : gridButtonAction
-            },
-            {
                 name: 'View',
                 bclass: 'view',
                 onpress : gridButtonAction
-            },
-            {
-                name: 'Delete',
-                bclass: 'delete',
-                onpress : gridButtonAction
-            },
-            {separator: true}
+            }
         ],
         searchitems : [
-            { display: 'Name', name : 'name', isdefault: true },
-            { display: 'Url', name : 'url' }
+            { display: 'UID', name : 'uid', isdefault: true },
+            { display: 'Citizen Name', name : 'name' },
+            { display: 'Service Provider', name : 'serviceprovider' },
+            { display: 'Client Txn ID', name : 'clientTxnId' },
+            { display: 'Bank Txn ID', name : 'bankTxnId' },
+            { display: 'Status', name : 'status' }
         ],
-        sortname: "name",
-        sortorder: "asc",
+        sortname: "created",
+        sortorder: "desc",
         usepager: true,
         singleSelect : true,
-        title: 'Listing all Banks',
+        title: 'Listing all Transactions',
         useRp: true,
         rp: 50,
         showTableToggleBtn: true,
@@ -142,7 +172,7 @@
                     if (k == "url" && v == "") {
                         cell.push("NA");
                     } else {
-                    	cell[k] = v;
+                        cell[k] = v;
                         cell.push(this);
                     }
                 });
@@ -165,7 +195,7 @@
         /* Check which button did the user press */
         if (command == "Add") {
             /* Add button pressed. Re-direct the user to Add screen */
-        	window.location.href = "create";
+            window.location.href = "create";
 
         } else {
             /* For update, delete and view, the user needs to select a row
@@ -192,10 +222,10 @@
                  }
              } else if (command == "Edit") {
                  /* User requested edit operation */
-            	 window.location.href = "edit?id=" + id;
+                 window.location.href = "edit?id=" + id;
              } else if (command == "View") {
                  /* User requested view operation */
-            	 window.location.href = "" + id;
+                 window.location.href = "" + id;
              }
         }
     }

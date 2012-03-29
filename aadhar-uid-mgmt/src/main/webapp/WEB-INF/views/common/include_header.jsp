@@ -20,6 +20,11 @@
         <%@include file="header_admin.jsp" %>
         <%@include file="menu_admin.jsp" %>
 <%
+    } else if (strSecurityContext != null && strSecurityContext.contains("ROLE_CITIZEN")) {
+%>
+        <%@include file="header_citizen.jsp" %>
+        <%@include file="menu_citizen.jsp" %>
+<%
     } else {
 %>
         <%@include file="header_all.jsp" %>
