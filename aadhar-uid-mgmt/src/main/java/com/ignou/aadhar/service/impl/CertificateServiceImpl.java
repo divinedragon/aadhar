@@ -19,6 +19,7 @@
 package com.ignou.aadhar.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -74,5 +75,17 @@ public class CertificateServiceImpl implements CertificateService {
     @Transactional
     public void delete(Integer id) throws RuntimeException {
         certificateDao.delete(id);
+    }
+
+    /**
+     * All valid Types of Certificates supported by the Database.
+     * @return Map containing the Types of the certificates. The keys are the
+     * actual values which can be used for Certificate field in the database.
+     * The values are Title Case version of the keys.
+     */
+    @Override
+    @Transactional
+    public Map<String, String> getTypes() {
+        return certificateDao.getTypes();
     }
 }

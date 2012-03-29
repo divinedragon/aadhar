@@ -18,6 +18,8 @@
  */
 package com.ignou.aadhar.service;
 
+import java.util.Map;
+
 import com.ignou.aadhar.domain.Certificate;
 
 /**
@@ -26,4 +28,12 @@ import com.ignou.aadhar.domain.Certificate;
  *
  */
 public interface CertificateService extends GenericService<Certificate> {
+
+    /**
+     * All valid Types of Certificates supported by the Database.
+     * @return Map containing the Types of the certificates. The keys are the
+     * actual values which can be used for Certificate field in the database.
+     * The values are Title Case version of the keys.
+     */
+    public Map<String, String> getTypes();
 }
