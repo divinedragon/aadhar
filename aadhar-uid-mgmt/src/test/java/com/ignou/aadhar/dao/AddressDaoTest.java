@@ -256,7 +256,7 @@ public class AddressDaoTest extends HibernateDaoSupport {
          * same values. Then we will test if the object returned from
          * fetchOrCreate and the existing db record are same.
          */
-        Address dbAddress = addressDao.read(1);
+        Address dbAddress = addressDao.read(16);
 
         Address testAddress1 = new Address();
         testAddress1.setAddressLine1(dbAddress.getAddressLine1());
